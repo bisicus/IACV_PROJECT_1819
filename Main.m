@@ -29,12 +29,12 @@ front_video.background = backgroundDetection(sysObjs.Front_BackgroundReader, 50)
 
 FrontKey_Shape_Extraction
 
+
+Front_KBD_Mask
+
 %% ----- Routine -----
 ii = 1;
-KBD_Mask = imdilate( ...
-        front_video.BlackKeys_Mask | front_video.WhiteKeys_Mask,...
-        strel('line', 15, -1.5)...
-);
+
 
 %% %{
 while ~isDone(sysObjs.Front_VideoReader)
@@ -44,8 +44,10 @@ while ~isDone(sysObjs.Front_VideoReader)
    hands = FRONT_skin_segmentation(frame);
   
    
-   masked = im2double(hands) .* KBD_Mask;
-   sysObjs.videoFileWriter.step(masked);
+   % Enlightening only fingers [part] that are over the KeyBoard
+   on_KBD_Hand = im2double(hands) .* front_video.Complete_KBD_Mask;
+   
+   sysObjs.videoFileWriter.step(on_KBD_Hand);
    
    ii = ii+1;
 end
