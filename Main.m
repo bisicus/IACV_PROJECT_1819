@@ -47,8 +47,18 @@ while ~isDone(sysObjs.Front_VideoReader)
    % Enlightening only fingers [part] that are over the KeyBoard
    on_KBD_Hand = im2double(hands) .* front_video.Complete_KBD_Mask;
    
-   sysObjs.videoFileWriter.step(on_KBD_Hand);
+   fingers_extremities = fingersExtremities(rgb2gray(on_KBD_Hand));
    
+   % Finger Tip is the lowest point of each "Blob"
+   finger_tips = reshape( ...
+      permute( fingers_extremities(2,:,:), [3,1,2] ), ...
+      size(fingers_extremities,3), ...
+      [] ...
+   );
+   
+   marked_frame = add_Marker_to_frame(frame, finger_tips);
+   sysObjs.videoFileWriter.step(marked_frame);
+
    ii = ii+1;
 end
 
