@@ -1,15 +1,18 @@
 function fingers_extremities = fingersExtremities(fingers)
 %FINGERSEXTREMITIES Given a greyscale image containing hand parts that are
 % over the Keyboard, extracts their extremities in term of [x,y] coordinates.
-% 'fingers_extremities' result is a 2*2*5 matrix containing:
-%     - upper [x,y] coordinates
-%     - bottom [x,y] coordinates
-%  Sorted from Thumb to Pinkie
+% OUTPUTS:
+%    * fingers_extremities - [2,2,:] matrix containing:
+%           - upper [x,y] coordinates
+%           - bottom [x,y] coordinates
+%      for each distinct 'blob'
+%
+% INPUT:
+%    * fingers - a greyscale image
+%
 % 
-% Data Requirement:
-%     - 'fingers' is a greyscale image, double
-%     - 'sorting_direction' is a string detailing how fingers have to be
-%        ordered depending on which hand has been given in inputz
+% PROCEDURE:
+%     TODO:
 
 
 fingers_props = regionprops(...
