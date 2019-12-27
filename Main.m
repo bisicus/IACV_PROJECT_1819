@@ -2,6 +2,16 @@ close all
 clear
 clc
 
+
+%{ 
+   IMPORTANT NOTES: 
+   1) All Homogeneous Vectors that will be computed during
+   this script will be in the form of a ROW Vector
+         [x, y, 1]
+   This is due the fact that MATLAB's plotting function requires that, in
+   case of plotting more points, [x,y] coordinates can be stacked together
+   
+%}
 %% Folder Inclusion
 
 addpath(genpath('Scripts'));

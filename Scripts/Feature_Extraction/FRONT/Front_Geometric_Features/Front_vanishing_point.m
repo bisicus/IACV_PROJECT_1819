@@ -91,31 +91,31 @@ lines_right = lines_right(1:end - del_idx);
 
 % pre-allocation for speed
 vanish_points = zeros(...
-                length(lines_left) * length(lines_right),...
-                3 ...
-            );
+length(lines_left) * length(lines_right),...
+3 ...
+);
 
 for ii = 1:length(lines_left)
-    
-    l1 = line_to_homog(lines_left(ii));
-%     [l1, p1, p2] = line_to_homog(lines_left(ii));
-    
-    for jj = 1:length(lines_right)
-        
-        l2 = line_to_homog(lines_right(jj));
-%         [l2, t1, t2] = line_to_homog(lines_right(jj));
 
-        vp = cross(l1, l2);
-        vp = vp / vp(3);
+   l1 = line_to_homog(lines_left(ii));
+   %     [l1, p1, p2] = line_to_homog(lines_left(ii));
 
-        k = (ii-1) * length(lines_right) + jj;
-        vanish_points(k, :) = vp;
+   for jj = 1:length(lines_right)
 
-%         plot(vp(1), vp(2), 'x')
-%         plot([p2(1), vp(1)], [p2(2), vp(2)], 'LineWidth',2,'Color','green');
-%         plot([t2(1), vp(1)], [t2(2), vp(2)], 'LineWidth',2,'Color','green');
-        
-    end
+      l2 = line_to_homog(lines_right(jj));
+      %         [l2, t1, t2] = line_to_homog(lines_right(jj));
+
+      vp = homog_cross(l1,l2);
+      
+      % Comping right index where to store
+      k = (ii-1) * length(lines_right) + jj;
+      vanish_points(k, :) = vp;
+
+      %         plot(vp(1), vp(2), 'x')
+      %         plot([p2(1), vp(1)], [p2(2), vp(2)], 'LineWidth',2,'Color','green');
+      %         plot([t2(1), vp(1)], [t2(2), vp(2)], 'LineWidth',2,'Color','green');
+
+   end
 end
 
 %% Center of Mass

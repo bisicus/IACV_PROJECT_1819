@@ -22,9 +22,9 @@ lines = lines(ind);
 point1 = [lines(1).point1, 1];
 point2 = [lines(end).point2, 1];
 
-l = cross(point1, point2);
 
-front_geometric_features.horiz_whiteKey_line = l/l(3);
+front_geometric_features.horiz_whiteKey_line = ...
+               homog_cross(point1, point2);
 
 
 %% Plotting
