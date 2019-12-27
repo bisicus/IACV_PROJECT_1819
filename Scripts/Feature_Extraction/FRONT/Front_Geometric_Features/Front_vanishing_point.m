@@ -97,13 +97,13 @@ length(lines_left) * length(lines_right),...
 
 for ii = 1:length(lines_left)
 
-   l1 = line_to_homog(lines_left(ii));
-   %     [l1, p1, p2] = line_to_homog(lines_left(ii));
+   l1 = HoughLine_to_homog(lines_left(ii));
+   %     [l1, p1, p2] = HoughLine_to_homog(lines_left(ii));
 
    for jj = 1:length(lines_right)
 
-      l2 = line_to_homog(lines_right(jj));
-      %         [l2, t1, t2] = line_to_homog(lines_right(jj));
+      l2 = HoughLine_to_homog(lines_right(jj));
+      %         [l2, t1, t2] = HoughLine_to_homog(lines_right(jj));
 
       vp = homog_cross(l1,l2);
       

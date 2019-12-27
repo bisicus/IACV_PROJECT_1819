@@ -13,7 +13,7 @@ clc
    case of plotting more points, [x,y] coordinates can be stacked together
    
 %}
-%% Folder Inclusion
+%%                   ---- Folder Inclusion -----
 
 addpath(genpath('Scripts'));
 addpath(genpath('Functions'));

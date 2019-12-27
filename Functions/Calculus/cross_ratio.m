@@ -6,7 +6,7 @@ function ratio = cross_ratio(X1,X2,X3,X4)
 %
 % INPUTS:
 %    * Xi - 2d homogeneous points represented in a row vector
-%        Xi = [x; y; 1]
+%        Xi = [x, y, 1]
 %
 % PROCEDURE:
 %    * ratio = (|X1, X2|*|X3, X4|) / (|X1, X3|*|X2, X4|)
