@@ -21,6 +21,14 @@ addpath(genpath('Videos'));
 
 %%                   ---- Preparing Steps ----- 
 
+
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % --------------------------- %
+            % -----  SYSTEM OJBECTS ----- %
+            % -----  INITIALIZATION ----- %
+            % --------------------------- %
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            
 front_video.videoPath = '/Videos/SweetDreams/Front/SweetDreams_Synchro_Front.mp4';
 front_video.backgroudPath = '/Videos/SweetDreams/Front/Background_Front.mp4';
 
@@ -32,11 +40,25 @@ sysObjs = initSystemObjects(...
          up_video.videoPath, up_video.backgroudPath ...
 );
 
-         % ----- Background Detection ----- %
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % ----------------------------------- %
+            % -----  BACKGROUNDS DETECTION  ----- %
+            % ----------------------------------- %
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-front_video.background = backgroundDetection(sysObjs.Front_BackgroundReader, 50);
 
-         % ----- Background Features Extraction ----- %
+front_video.background = ...
+      backgroundDetection(sysObjs.Front_BackgroundReader, 50);
+      
+   
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % ---------------------------------- %
+            % -----  BACKGROUNDS FEATURES  ----- %
+            % ----------- EXTRACTION ----------- %
+            % ---------------------------------- %
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+               
+               % ----- FRONT BACKGROUND ----- %
 
 % Video Features
 FrontKey_Shape_Extraction
@@ -47,12 +69,41 @@ Front_vanishing_point
 Front_WhiteKeys_line
 Front_blackKeys_line
 
+               % ----- UPPER BACKGROUND ----- %
+
+% TODO
+
+
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % ------------------------------- %
+            % -----   HARDCODING KNOWN  ----- %
+            % -----  WORLD MEASUREMENTS ----- %
+            % ------------------------------- %
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            
+%{
+   Real World Coordinate system has its zero fixed where keyboard's keys
+   are connecte to the plastic command board. while having Z-axis growing
+   through keys lenght.
+            
+   All Measuments are taken in millimeters
+%}
+            
+WORLD_Measures.White_Keys_End = 135; % Corresponding to lenght of white keys
+
+WORLD_Measures.Black_Keys_End = 82; % Corresponding to lenght of black keys
+
+WORLD_Measures.Only_White_Portion_lenght = ...
+         WORLD_Measures.White_Keys_End - WORLD_Measures.Black_Keys_End;
+            
+% TODO: Include other measuments
+
 
 %% ----- Routine -----
 ii = 1;
 
 
-%% %{
+% %{
 while ~isDone(sysObjs.Front_VideoReader)
    
    frame = sysObjs.Front_VideoReader.step();
