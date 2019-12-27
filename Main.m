@@ -1,3 +1,4 @@
+
 close all
 clear
 clc
@@ -60,9 +61,42 @@ while ~isDone(sysObjs.Front_VideoReader)
   
    
    Front_finger_tips = Finger_Tips(hands, front_video.Complete_KBD_Mask);
-   
-   
+   % just for plotting
    marked_frame = add_Marker_to_frame(frame, Front_finger_tips);
+   
+   %{
+      Computation of Real World Coordinates of Finger Tips
+      PROCEDURE for each Finger Tip:
+      1) CrossRatio Elements Computation
+         - Computation of 'line to the horizon' passing through Tip and 
+           Vanishing Point
+         - B Point, intersection of 'horizon line' and 'Black Keys
+           Termination' line
+         - W Point, intersection of 'horizon line' and 'White Keys
+           Termination' line
+      2) Computing CrossRatio for T, B, W, Vp
+      3) Using Cr quantity to Compute World Coordinates
+         - TODO:
+   
+   %}
+   
+   for kk = 1:size(Front_finger_tips, 1)
+      T = [ Front_finger_tips(kk, :), 1 ];
+      
+      horizon_line = homog_cross(T, front_geometric_features.vanish_point);
+      B = homog_cross(horizon_line, front_geometric_features.horiz_BlackKey_line);
+      W = homog_cross(horizon_line, front_geometric_features.horiz_whiteKey_line);
+      
+      %{
+         Point order is fixed so that hardcoded 'real-world known properies'
+         can be used.
+         Points are loaded in the same order in which they could be
+         encountered by going from camera to Vanishing Point:
+         T, B, W, 
+      %}
+      
+      C_r = cross_ratio(T, B, W, front_geometric_features.vanish_point);
+   end
    sysObjs.videoFileWriter.step(marked_frame);
 
    ii = ii+1;
