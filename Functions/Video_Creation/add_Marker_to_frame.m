@@ -3,6 +3,13 @@ function frame = add_Marker_to_frame(frame, enlight_coords)
 % pressed key coordinate
 % 
 
+
+% in case of Homogenous Coordinates inputs
+if size(enlight_coords, 2) > 2
+   enlight_coords = enlight_coords(:,1:2);
+end
+
+
 radius = 10; %px
 
 % InserShape requires a [:,3] matrix defined as:
