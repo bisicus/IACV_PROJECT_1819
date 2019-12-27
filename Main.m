@@ -27,10 +27,15 @@ front_video.background = backgroundDetection(sysObjs.Front_BackgroundReader, 50)
 
          % ----- Background Features Extraction ----- %
 
+% Video Features
 FrontKey_Shape_Extraction
-
-
 Front_KBD_Mask
+
+% Geometric Features
+Front_vanishing_point
+Front_WhiteKeys_line
+Front_blackKeys_line
+
 
 %% ----- Routine -----
 ii = 1;
