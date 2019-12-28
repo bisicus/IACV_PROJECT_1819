@@ -50,6 +50,8 @@ sysObjs = initSystemObjects(...
 front_video.background = ...
       backgroundDetection(sysObjs.Front_BackgroundReader, 50);
       
+up_video.background = ...
+      backgroundDetection(sysObjs.Upper_BackgroundReader, 50);
    
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % ---------------------------------- %
@@ -71,7 +73,9 @@ Front_blackKeys_line
 
                % ----- UPPER BACKGROUND ----- %
 
-% TODO
+% Video Features
+UpperKey_Shape_Extraction
+Upper_KBD_Mask
 
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
