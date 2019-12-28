@@ -82,9 +82,9 @@ Front_blackKeys_line
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
 %{
-   Real World Coordinate system has its zero fixed where keyboard's keys
-   are connecte to the plastic command board. while having Z-axis growing
-   through keys lenght.
+   World Coordinate System Origin (O) is fixed where keyboard's keys are
+   connected to the plastic command board.
+   Z-axis grows through keys lenght.
             
    All Measuments are taken in millimeters
 %}
@@ -102,8 +102,6 @@ WORLD_Measures.Only_White_Portion_lenght = ...
 %% ----- Routine -----
 ii = 1;
 
-
-% %{
 while ~isDone(sysObjs.Front_VideoReader)
    
    frame = sysObjs.Front_VideoReader.step();
@@ -147,6 +145,8 @@ while ~isDone(sysObjs.Front_VideoReader)
       %}
       
       C_r = cross_ratio(T, B, W, front_geometric_features.vanish_point);
+      
+      Z_Coord = tip_world_depth(WORLD_Measures, C_r);
    end
    sysObjs.videoFileWriter.step(marked_frame);
 
