@@ -8,7 +8,7 @@ KBD_Mask = imdilate( ...
         KBD_Mask, strel('line', 10, 5)...
 );
 
-front_video.Complete_KBD_Mask = imfill(KBD_Mask, 'holes');
+up_video.Complete_KBD_Mask = imfill(KBD_Mask, 'holes');
 
 %%
 clear KBD_Mask
