@@ -152,8 +152,16 @@ while ~isDone(sysObjs.Front_VideoReader)
       
       Z_Coord = tip_world_depth(WORLD_Measures, C_r);
    end
-   sysObjs.videoFileWriter.step(marked_frame);
-
+   
+   % ----- UPPER VIDEO PROCESSING ----- %
+   UP_frame = sysObjs.Upper_VideoReader.step();
+   UP_tips = UP_Finger_tips(UP_frame);
+   
+   if plot
+      hands_separated = add_Marker_to_frame(hands_separated, UP_tips);
+      sysObjs.videoFileWriter.step(hands_separated);
+   end
+   
    ii = ii+1;
 end
 
