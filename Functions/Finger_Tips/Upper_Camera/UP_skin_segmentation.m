@@ -27,6 +27,6 @@ mask = bwareaopen(mask, 400);
 
 out = im2double(frame) .* mask;
 
-imshow(out)
+% imshow(out)
 
 end

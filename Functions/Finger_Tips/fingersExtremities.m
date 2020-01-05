@@ -1,5 +1,5 @@
 function fingers_extremities = fingersExtremities(fingers)
-%FINGERSEXTREMITIES Given a greyscale image containing hand parts that are
+%FINGERS_EXTREMITIES Given a greyscale image containing hand parts that are
 % over the Keyboard, extracts their extremities in term of [x,y] coordinates.
 % OUTPUTS:
 %    * fingers_extremities - [2,2,:] matrix containing:
