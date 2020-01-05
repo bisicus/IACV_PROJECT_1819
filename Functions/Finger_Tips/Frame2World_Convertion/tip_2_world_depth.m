@@ -1,5 +1,5 @@
 function Z_Coordinate = tip_world_depth(WORLD_Measures,cross_ratio)
-%REAL_WORLD_COORDINATES computes depth of Finger-Tip in 'World Coordinates
+%TIP_WORLD_DEPTH computes depth of Finger-Tip in 'World Coordinates
 %  System' by mean of relation between Image Cross-Ratio and real world
 %  known measurements.
 %
