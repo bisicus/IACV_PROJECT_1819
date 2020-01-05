@@ -105,17 +105,12 @@ WORLD_Measures.Only_White_Portion_lenght = ...
 
 %% ----- Routine -----
 ii = 1;
+plot = 1;
 
 while ~isDone(sysObjs.Front_VideoReader)
    
-   frame = sysObjs.Front_VideoReader.step();
-   
-   hands = FRONT_skin_segmentation(frame);
-  
-   
-   Front_finger_tips = Finger_Tips(hands, front_video.Complete_KBD_Mask);
-   % just for plotting
-   marked_frame = add_Marker_to_frame(frame, Front_finger_tips);
+   FRONT_frame = sysObjs.Front_VideoReader.step();
+   FRONT_tips = FRONT_Finger_tips(FRONT_frame, front_video.Complete_KBD_Mask);
    
    %{
       Computation of Real World Coordinates of Finger Tips

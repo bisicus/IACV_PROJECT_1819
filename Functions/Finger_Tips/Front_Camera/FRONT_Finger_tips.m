@@ -1,5 +1,5 @@
-function [finger_tips] = Finger_Tips(frame, KBD_Mask)
-%FINGER_TIP
+function [finger_tips] = FRONT_Finger_tips(frame, KBD_Mask)
+%FRONT_FINGER_TIPS
 %
 % OUTPUTS:
 %    * finger_tips - integer array
@@ -11,17 +11,20 @@ function [finger_tips] = Finger_Tips(frame, KBD_Mask)
 %    * KBD_Mask - Logical Mask "Playable Area" of the Keyboard
 %
 % PROCEDURE:
-%    1) Isolation of Hand areas that are over Keyboard
+%    1) Hands extraction by color segmentation
+% 
+%    2) Isolation of Hand areas that are over Keyboard
 %
-%    2) Computation of 'vertical' extremities of each area
+%    3) Computation of 'vertical' extremities of each area
 %    
-%    3) Isolation of 'bottom' only coordinates
+%    4) Isolation of 'bottom' only coordinates
 %
-% NOTE: 
 %    
 % See also FRONT_SKIN_SEGMENTATION
 
-on_KBD_Hand = im2double(frame) .* KBD_Mask;
+hands = FRONT_skin_segmentation(frame);
+
+on_KBD_Hand = im2double(hands) .* KBD_Mask;
 on_KBD_Hand = rgb2gray(on_KBD_Hand);
 
 
