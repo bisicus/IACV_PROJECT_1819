@@ -107,7 +107,8 @@ WORLD_Measures.Only_White_Portion_lenght = ...
 ii = 1;
 plot = 1;
 
-while ~isDone(sysObjs.Front_VideoReader)
+while ~isDone(sysObjs.Front_VideoReader) ...
+      && ~isDone(sysObjs.Upper_VideoReader)
    
    % ----- FRONT VIDEO PROCESSING ----- %
    FRONT_frame = sysObjs.Front_VideoReader.step();
@@ -120,11 +121,12 @@ while ~isDone(sysObjs.Front_VideoReader)
    
    
    % ----- TIPS TO WORLD CONVERSION ----- %
-   [X_Coord, Z_Coord] = FRONT_Tips2World( FRONT_tips, front_geometric_features );
+%    [X_Coord, Z_Coord] = FRONT_Tips2World( FRONT_tips, front_geometric_features );
    
    if plot
-      hands_separated = add_Marker_to_frame(hands_separated, UP_tips);
-      sysObjs.videoFileWriter.step(hands_separated);
+      FRONT_frame = add_Marker_to_frame(FRONT_frame, FRONT_tips);
+      UP_frame = add_Marker_to_frame(UP_frame, UP_tips);
+%       sysObjs.videoFileWriter.step( ... );
    end
    
    ii = ii+1;
