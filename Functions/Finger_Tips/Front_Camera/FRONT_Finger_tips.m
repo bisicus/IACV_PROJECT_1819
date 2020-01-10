@@ -28,7 +28,7 @@ on_KBD_Hand = im2double(hands) .* KBD_Mask;
 on_KBD_Hand = rgb2gray(on_KBD_Hand);
 
 
-fingers_extremities = fingersExtremities(on_KBD_Hand);
+finger_tips = FRONT_Tips_Coord(fingers);
 
 % Finger Tip is the lowest point of each "Blob"
 finger_tips = reshape( ...
