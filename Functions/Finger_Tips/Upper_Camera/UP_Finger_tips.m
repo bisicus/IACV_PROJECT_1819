@@ -1,6 +1,25 @@
 function [tips] = UP_Finger_tips(frame)
-%UP_FINGER_TIPS Summary of this function goes here
-%   Detailed explanation goes here
+%UP_Finger_tips returns an array containing [x,y] (= [col, row])
+%coordinates of finger-tips, computed as a "Spike" of each finger
+%
+% OUTPUTS:
+%    * finger_tips - vertically stacked [x,y] integer coordinates matrix
+%
+%
+% INPUT:
+%    * frame - RGB Frame
+%
+%
+% PROCEDURE:
+%    1) Hands extraction by color segmentation
+% 
+%    2) Fingers enlightening by border subtraction
+%
+%    3) Computation fingers' "spike" by extracting maxima from fingers
+%       translated as a [X,Y] Signal
+%
+%
+% See also UP_skin_segmentation, UP_Tips_Coord, FRONT_Finger_tips
 
 hands = UP_skin_segmentation(frame);
 

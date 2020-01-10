@@ -1,27 +1,38 @@
 function finger_tips = UP_Tips_Coord(hands)
-%UP_Tips_Coord Extracts Contour of hand by mean of fudged Sobel Edge Operator
+%UP_Tips_Coord returns a set of [x,y] (= [col, row]) coordinates from a
+%grayscale image where each ROI corresponds to a finger.
+%Coordinate are computed as the "spike" of each finger.
+%
 % OUTPUTS:
-%    * finger_tips - ...
+%    * finger_tips - vertically stacked [x,y] integer coordinates matrix
+%
 %
 % INPUT:
-%    * hands - greyscale frame
-%   
+%    * hands - grayscale frame
+%
+%
 % PROCEDURE:
 %    1) Compute Perimeter of visible hands, returning a logical image
 %
 %    2) Selection of top-most part of perimeter, deleting borders near
 %       wrist
 %
-%    3) Tip Selection from Top-Border:
-%       a) Transformation of Top-Border in a 1D Signal, obtaining two
+%    3) Tip Selection from Top-Perimeter:
+%       a) Translation of Top-Perimeter in a 1D Signal, obtaining two
 %          distinct continuous curve lines
-%       b) Selection of local maxima of each line in term of [col, row]
+%       b) Selection of local maxima of each line in term of [x, y]
 %          coordinates
-%          NOTE: [col, row] = [x, y]
+%          NOTE: [x, y] = [col, row]
+%
 % 
 % References:
 %    1) https://www.mathworks.com/matlabcentral/answers/462320-filtering-column-data-with-the-same-value
 %    2) https://it.mathworks.com/help/signal/ref/findpeaks.html#namevaluepairs
+%
+%
+% See also UP_Finger_tips, FRONT_Tips_Coord
+
+
 
    % ===== 1. Perimeter ===== %
 hands = imbinarize(hands);

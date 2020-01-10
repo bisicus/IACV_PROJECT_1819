@@ -1,5 +1,16 @@
 function out = UP_skin_segmentation(frame)
-
+%UP_skin_segmentation removes useless details from frame returning an image
+%where only skin is enlightened.
+%Computation is done by checking at RGB and HVS frame values.
+%
+%
+% OUTPUTS:
+%    * out - RGB containing only segmented hands. Useless details are make
+%    BLACK ([0,0,0] RGB Value)
+%
+%
+% INPUT:
+%   * frame - RGB Frame
 mask_rgb = frame(:,:,1) > 130 & frame(:,:,1) < 195 ...
             & frame(:,:,2) > 62 & frame(:,:,2) < 108 ...
             & frame(:,:,3) > 45 & frame(:,:,3) < 80;

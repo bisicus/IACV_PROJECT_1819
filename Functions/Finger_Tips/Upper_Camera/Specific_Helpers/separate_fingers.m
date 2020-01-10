@@ -1,8 +1,10 @@
 function hands_separated = separate_fingers(hand_frame)
-%SEPARATE_FINGERS tries to exploit color differences between fingers in
-% order to add a black (0 value) thick border in between
+%separate_fingers exploits color differences between fingers in order to
+%add a black ([0,0,0] RGB value) thick border in between
+%
 % OUTPUTS:
 %    * hand_separated - frame with black border in between fingers
+%
 %
 % INPUT:
 %    * hand_frame - RGB frame
@@ -14,7 +16,7 @@ function hands_separated = separate_fingers(hand_frame)
 %    2) Subtraction from original frame of borders
 
 
-% ----- 1. Enhanced Perimeter Computation ---- %
+% ===== 1. Enhanced Perimeter Computation ===== %
 
 % 1) Enhancing Canny Edge Detection
 edg = edge(hand_frame, 'Canny', 0.1, 1);
@@ -38,13 +40,13 @@ enhanced_perim = bwareaopen(enhanced_perim, 100, 4);
 
 
 
-% ----- 2. Fingers Separation ---- %
+% ===== 2. Fingers Separation ===== %
 
 enhanced_perim = imdilate(enhanced_perim, strel('diamond', 2));
 hands_separated = imsubtract(hand_frame, im2double(enhanced_perim));
 
 
-% ----- 3. Deleting Resulting Small Areas---- %
+% ===== 3. Deleting Resulting Small Areas ===== %
 mask = imbinarize(hands_separated);
 mask = bwareaopen(mask, 100);
 hands_separated = hands_separated .* mask;

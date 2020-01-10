@@ -1,4 +1,16 @@
-function [out] = FRONT_skin_segmentation(frame)
+function out = FRONT_skin_segmentation(frame)
+%FRONT_skin_segmentation removes useless details from frame returning an
+%image where only skin is enlightened.
+%Computation is done by checking at RGB and HVS frame values.
+%
+%
+% OUTPUTS:
+%    * out - RGB containing only segmented hands. Useless details are make
+%    BLACK ([0,0,0] RGB Value)
+%
+%
+% INPUT:
+%   * frame - RGB Frame
 
 mask_rgb = frame(:,:,1) > 175 & frame(:,:,1) < 235 ...
             & frame(:,:,2) > 85 & frame(:,:,2) < 165 ...
