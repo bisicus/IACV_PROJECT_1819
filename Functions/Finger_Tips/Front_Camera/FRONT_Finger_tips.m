@@ -24,17 +24,15 @@ function [finger_tips] = FRONT_Finger_tips(frame, KBD_Mask)
 
 hands = FRONT_skin_segmentation(frame);
 
-on_KBD_Hand = im2double(hands) .* KBD_Mask;
-on_KBD_Hand = rgb2gray(on_KBD_Hand);
+on_KBD_Hand = hands .* KBD_Mask;
+% Isolate RED Component
+on_KBD_Hand = on_KBD_Hand(:,:,1);
 
+fingers = on_KBD_Hand>0;
+fingers = bwmorph(fingers, 'bridge', Inf);
+fingers = bwmorph(fingers, 'spur', Inf);
+fingers = bwmorph(fingers, 'close', Inf);
+fingers = medfilt2(fingers, [6,6]);
 
 finger_tips = FRONT_Tips_Coord(fingers);
-
-% Finger Tip is the lowest point of each "Blob"
-finger_tips = reshape( ...
-   permute( fingers_extremities(2,:,:), [3,1,2] ), ...
-   size(fingers_extremities,3), ...
-   [] ...
-);
-
 end
