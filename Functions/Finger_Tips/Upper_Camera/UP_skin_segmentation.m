@@ -11,6 +11,8 @@ function out = UP_skin_segmentation(frame)
 %
 % INPUT:
 %   * frame - RGB Frame
+
+
 mask_rgb = frame(:,:,1) > 130 & frame(:,:,1) < 195 ...
             & frame(:,:,2) > 62 & frame(:,:,2) < 108 ...
             & frame(:,:,3) > 45 & frame(:,:,3) < 80;

@@ -1,6 +1,6 @@
 function [homog_line, p1, p2] = HoughLine_to_homog(line)
-%HOUGHLINE_TO_HOMOG transforms an Hough Line struct to its homogeneous dual
-% vector
+%HoughLine_to_homog transforms an Hough Line struct to its homogeneous dual
+%vector
 % OUTPUTS:
 %    * homog_line - row vector in the form [x, y, 1]:
 % 
