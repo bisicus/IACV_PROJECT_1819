@@ -96,7 +96,6 @@ Black_Mask = Black_Mask & ~bwareafilt(Black_Mask, 2, 'largest');
 
 % Also a small square will survive mask treatment, and can be easily
 % deleted.
-
 up_video.BlackKeys_Mask = Black_Mask & ~bwareafilt(Black_Mask, 1, 'smallest');
 
             % ==================== %
@@ -104,16 +103,22 @@ up_video.BlackKeys_Mask = Black_Mask & ~bwareafilt(Black_Mask, 1, 'smallest');
             
    % ===== Centroid Feature extraction ====== %
    
-props = regionprops(Black_Mask, 'MaxFeretProperties');
+props = regionprops(up_video.BlackKeys_Mask, 'MaxFeretProperties', 'Centroid');
 
 
-% Store keys as matrix of vertically stacked [x,y] centroid coordinates
+   % ----- Store keys as matrix of vertically ----- %
+   % ----- stacked [x,y] centroid coordinates ----- %
+
 % Note: Image Coordinate system Origin is placed at Top-Left corner while Y
 % coordinates grows by going down. Bottom Key Coordinate has the greatest
 % 'row' value
-up_video.BlackKeys_centerCoordinates = ...
-         Feret_Coordinates_Extraction([props.MaxFeretCoordinates], 'high');
+black_feret_extrema= ...
+      Feret_Coordinates_Extraction([props.MaxFeretCoordinates], 'high');
 
+black_centroids = vertcat(props.Centroid);
+
+up_video.BlackKeys_centerCoordinates = [black_centroids(:,1), ...
+                                        black_feret_extrema(:,2)];
 % Plotting
 % figure(101);
 % imshow( up_video.BlackKeys_Mask );
@@ -122,5 +127,29 @@ up_video.BlackKeys_centerCoordinates = ...
 %          up_video.BlackKeys_centerCoordinates(:,2), ...
 %          'ro' );
 
-%% Cleaning Workspace
+%% Joining Centroids 
+
+centr = cat( 1, ...
+            up_video.WhiteKeys_centerCoordinates, ...
+            up_video.BlackKeys_centerCoordinates );
+
+% Sort on X Coordinate Value
+
+centr = sortrows( centr, 1, 'ascend' );
+
+up_video.ALLKeys_centerCoordinates = centr;
+
+% Plotting
+% figure(102);
+% imshow( up_video.BlackKeys_Mask | up_video.WhiteKeys_Mask );
+% hold on;
+% scatter( centr(:,1), ...
+%          centr(:,2), ...
+%          'ro' );
+
+
+%% ----- Cleaning Workspace ----- %
+
 clear BW BW_dilated Black_Mask props angle
+clear black_centroids black_feret_extrema
+clear centr
