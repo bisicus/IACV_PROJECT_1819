@@ -36,7 +36,7 @@ for kk = 1:size(Front_finger_tips, 1)
       
       C_r = cross_ratio(T, B, W, front_geometric_features.vanish_point);
       
-      Z_Coord(kk) = tip_world_depth(WORLD_Measures, C_r);
+      Z_Coord(kk) = tip_2_world_depth(WORLD_Measures, C_r);
 end
 
 end

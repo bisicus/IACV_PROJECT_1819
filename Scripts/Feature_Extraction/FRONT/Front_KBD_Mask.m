@@ -11,4 +11,4 @@ front_video.Complete_KBD_Mask = imdilate( ...
 );
 
 %%
-clear KBD_Mask
+clear KBD_Mask s1 s2

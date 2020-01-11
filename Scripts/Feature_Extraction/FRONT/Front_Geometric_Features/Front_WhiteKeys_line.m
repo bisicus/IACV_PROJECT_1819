@@ -1,3 +1,4 @@
+
 I = front_video.WhiteKeys_Mask;
 BW = bwperim(I);
 
