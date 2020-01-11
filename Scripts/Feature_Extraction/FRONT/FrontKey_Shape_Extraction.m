@@ -27,7 +27,7 @@
       % ===== Keyboard Mask Detection ====== %
 
 % 1) color filtering: white pixels will be enlightened
-BW = imbinarize(front_video.background, 0.7);
+BW = imbinarize(front_video.background, 0.74);
 BW = all(BW, 3);
 BW = bwareaopen(BW, 50);
 
