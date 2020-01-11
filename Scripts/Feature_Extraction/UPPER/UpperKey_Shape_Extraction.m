@@ -47,13 +47,23 @@ Black_Mask = imopen(Black_Mask, strel('square', 15));
 % keyboard. Those areas are surely wider than single keys making them
 % easilly identifiable.
 up_video.BlackKeys_Mask = Black_Mask & ~bwareafilt(Black_Mask, 2, 'largest');
+props = regionprops(Black_Mask, 'MaxFeretProperties');
 
-% Centroid Feature extraction
-props = regionprops(Black_Mask, 'Centroid'); 
 
 % Store keys as matrix of vertically stacked [x,y] centroid coordinates
-up_video.BlackKeys_centerCoordinates = vertcat(props.Centroid);
+% Note: Image Coordinate system Origin is placed at Top-Left corner while Y
+% coordinates grows by going down. Bottom Key Coordinate has the greatest
+% 'row' value
+up_video.BlackKeys_centerCoordinates = ...
+         Feret_Coordinates_Extraction([props.MaxFeretCoordinates], 'high');
 
+% Plotting
+% figure(101);
+% imshow( up_video.BlackKeys_Mask );
+% hold on;
+% scatter( up_video.BlackKeys_centerCoordinates(:,1), ...
+%          up_video.BlackKeys_centerCoordinates(:,2), ...
+%          'ro' );
 
 %% Cleaning Workspace
 clear BW BW_dilated Black_Mask props angle
