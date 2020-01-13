@@ -22,9 +22,7 @@
    
 %}
 
-%% ===== WHITE KEYS ====== %
-
-      % ===== Keyboard Mask Detection ====== %
+      %% ===== WHITE KEYS Keyboard Mask Detection ====== %
 
 % 1) color filtering: white pixels will be enlightened
 BW = imbinarize(front_video.background, 0.74);
@@ -48,32 +46,15 @@ BW_dilated = bwareafilt(BW_dilated, 1, 'largest');
 % actual White Key mask.
 front_video.WhiteKeys_Mask = BW & BW_dilated;
 
-            % ==================== %
+                     % ==================== %
             
-            
-   % ===== Centroid Feature extraction ====== %
-props = regionprops(front_video.WhiteKeys_Mask, 'Centroid');
-
-% Store keys as matrix of vertically stacked [x,y] centroid coordinates
-front_video.WhiteKeys_centerCoordinates = vertcat(props.Centroid);
-
-% Plotting
-% figure(200);
-% imshow( front_video.WhiteKeys_Mask );
-% hold on;
-% scatter( front_video.WhiteKeys_centerCoordinates(:,1), ...
-%          front_video.WhiteKeys_centerCoordinates(:,2), ...
-%          'ro' );
-
-%% ----- BLACK KEYS ----- %
-
-      % ===== Keyboard Mask Detection ====== %
+      %% ===== BLACK KEYS Keyboard Mask Detection ====== %
       
    % ----- color filtering ----- %
 % 1) some light affects keys, RGB value is't totally black
 BlackKeys_Mask = all(front_video.background <= 140, 3);
 
-% 2) Find Areas that have been obscured by Hand-Preprocessing
+% 2) Find Areas that have been obscured by Frame-Preprocessing
 NoiseElement_mask = all(front_video.background <= 5, 3);
 
 % 3) Enlarging to include all other plastic elements that do not belong
@@ -88,45 +69,115 @@ BlackKeys_Mask = imfill(BlackKeys_Mask, 'holes');
 
 front_video.BlackKeys_Mask = bwareaopen(BlackKeys_Mask, 150);
 
-            % ==================== %
+                     % ==================== %
 
+                     
+      %% ===== WHITE KEYS Centroid Feature extraction ====== %
+
+props = regionprops(front_video.WhiteKeys_Mask, 'Centroid', ... 
+                                                'Extrema');
+
+   % ----- 'Upper Extrema' ----- %
+% Store 'Upper Extrema' as a vertically stacked [x,y] coordinates matrix
+% Extrema are represented by Keys' centroid
+
+centroids = vertcat(props.Centroid);
+front_video.WHITE_Keys_centerCoord_SUP = centroids;
+
+
+
+   % ----- 'Lower Extrema' ----- %
+% Store 'Lower Extrema' as a vertically stacked [x,y] coordinates matrix
+% Extrema are represented by Keys' central lowest Point
+bottom_extrema = Extrema_Coord_AVG(props, 'low');
+front_video.WHITE_Keys_centerCoord_INF = bottom_extrema;
+
+
+   % ----- Plotting ----- %
+% figure(200);
+% imshow( front_video.WhiteKeys_Mask );
+% hold on;
+% scatter( front_video.WHITE_Keys_centerCoord_SUP(:,1), ...
+%          front_video.WHITE_Keys_centerCoord_SUP(:,2), ...
+%          'ro' );
+%       
+% scatter( front_video.WHITE_Keys_centerCoord_INF(:,1), ...
+%          front_video.WHITE_Keys_centerCoord_INF(:,2), ...
+%          'go' );
+ 
+                     % ==================== %
             
-   % ===== Centroid Feature extraction ====== %
+                     
+      %% ===== BLACK KEYS Centroid Feature extraction ====== %
    
-props = regionprops(front_video.BlackKeys_Mask, 'Centroid');
+props = regionprops(front_video.BlackKeys_Mask, 'Centroid', 'Extrema');
 
-   % ----- Store keys as matrix of vertically ----- %
-   % ----- stacked [x,y] centroid coordinates ----- %
 
-front_video.BlackKeys_centerCoordinates = vertcat(props.Centroid);
+   % ----- Coordinate Computation ----- %
+   
+% Store 'Upper Extrema' as a vertically stacked [x,y] coordinates matrix
+% centroids = vertcat(props.Centroid);
+upper_extrema = Extrema_Coord_AVG(props, 'high');
 
-% Plotting
+% Store 'Low Extrema' as a vertically stacked [x,y] coordinates matrix
+bottom_extrema = Extrema_Coord_AVG(props, 'low');
+
+   
+   % ----- Coordinate Storing ----- %
+
+front_video.BLACK_Keys_centerCoord_SUP = upper_extrema;
+front_video.BLACK_Keys_centerCoord_INF = bottom_extrema;
+   
+
+   % ----- Plotting ----- %
 % figure(201);
 % imshow( front_video.BlackKeys_Mask );
 % hold on;
-% scatter( front_video.BlackKeys_centerCoordinates(:,1), ...
-%          front_video.BlackKeys_centerCoordinates(:,2), ...
+% scatter( front_video.BLACK_Keys_centerCoord_SUP(:,1), ...
+%          front_video.BLACK_Keys_centerCoord_SUP(:,2), ...
 %          'ro' );
+%       
+% scatter( front_video.BLACK_Keys_centerCoord_INF(:,1), ...
+%          front_video.BLACK_Keys_centerCoord_INF(:,2), ...
+%          'go' );
 
-%% Joining Centroids 
 
+      %% ===== Joining Centroids ===== %
+
+   % ----- Top Values ----- %
 centr = cat( 1, ...
-            front_video.WhiteKeys_centerCoordinates, ...
-            front_video.BlackKeys_centerCoordinates );
+            front_video.WHITE_Keys_centerCoord_SUP, ...
+            front_video.BLACK_Keys_centerCoord_SUP );
 
 % Sort on X Coordinate Value
-
 centr = sortrows( centr, 1, 'ascend' );
 
-front_video.ALLKeys_centerCoordinates = centr;
+front_video.ALLKeys_centerCoord_SUP = centr;
 
-% Plotting
+
+   % ----- Bottom Values ----- %
+centr = cat( 1, ...
+            front_video.WHITE_Keys_centerCoord_INF, ...
+            front_video.BLACK_Keys_centerCoord_INF );
+
+% Sort on X Coordinate Value
+centr = sortrows( centr, 1, 'ascend' );
+
+front_video.ALLKeys_centerCoord_INF = centr;
+
+
+
+   % ----- Plotting ----- %
 % figure(202);
 % imshow( front_video.BlackKeys_Mask | front_video.WhiteKeys_Mask );
 % hold on;
-% scatter( centr(:,1), ...
-%          centr(:,2), ...
+% scatter( front_video.ALLKeys_centerCoord_SUP(:,1), ...
+%          front_video.ALLKeys_centerCoord_SUP(:,2), ...
 %          'ro' );
+%       
+% scatter( front_video.ALLKeys_centerCoord_INF(:,1), ...
+%          front_video.ALLKeys_centerCoord_INF(:,2), ...
+%          'g*' );
 
 
 
@@ -135,3 +186,4 @@ front_video.ALLKeys_centerCoordinates = centr;
 clear BW BW_dilated 
 clear BlackKeys_Mask NoiseElement_mask
 clear props centr
+clear bottom_extrema upper_extrema centroids

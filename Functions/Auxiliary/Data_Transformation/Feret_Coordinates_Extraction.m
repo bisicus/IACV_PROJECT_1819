@@ -4,7 +4,7 @@ function coords = Feret_Coordinates_Extraction(Feret_data, values)
 %Depending on 'values' returns high or low coordinates.
 %   
 % FUNCTION CALL SKETCH
-%    coords = Feret_Coordinates_Extraction([props.MaxFeretCoordinates], 'top')
+%    coords = Feret_Coordinates_Extraction([props.MaxFeretCoordinates], 'high')
 %
 %
 % OUTPUTS:
