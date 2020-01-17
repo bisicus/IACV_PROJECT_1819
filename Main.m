@@ -123,6 +123,20 @@ while ~isDone(sysObjs.Front_VideoReader) ...
    UP_tips = UP_Finger_tips(UP_frame);
    
    
+   % ----- TIPS MATCHING ----- %
+   matched_tips = match_UpFront_tips(FRONT_tips, UP_tips, ....
+                                    front_video, up_video, ...
+                                    front_geometric_features);
+                                 
+%   f_matched = permute( matched_tips(1, :,:), [3,2,1] );
+%   figure(1); imshow(FRONT_frame); hold on
+%   scatter( f_matched(:,1), f_matched(:,2), 80, [1:1:length(f_matched(:,1))], 'filled' )
+%   
+%   u_matched = permute( matched_tips(2, :,:), [3,2,1] );
+%   figure(2); imshow(UP_frame); hold on
+%   scatter( u_matched(:,1), u_matched(:,2), 80, [1:1:length(u_matched(:,1))], 'filled' )
+   
+   
    % ----- TIPS TO WORLD CONVERSION ----- %
 %    [X_Coord, Z_Coord] = FRONT_Tips2World( FRONT_tips, front_geometric_features );
    

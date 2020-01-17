@@ -51,18 +51,19 @@ function matched_tips = match_UpFront_tips(FRONT_tips, UP_tips, ...
 %       structure is selected
 
 
-UP_Keys = up_video_struct.ALLKeys_centerCoord_INF;
-
+UP_Keys = up_video_struct.ALLKeys_centerCoord;
 
 % Preallocating result memory space (for speed)
-matched_tips = zeros(2,2, size(FRONT_tips, 1));
+matched_tips = zeros(size(FRONT_tips, 1), 2);
+
+
 
 
 for jj = 1:size(FRONT_tips, 1)
    
    F_Tip = FRONT_tips(jj,:);
    
-   % ----- Choosing Appropriate Coordinate Structure ----- %
+   % ----- Choosing FRONT Appropriate Coordinate Structure ----- %
    if point_above_line(F_Tip, front_geometric_features.horiz_BlackKey_line)
       Front_Keys = front_video_struct.ALLKeys_centerCoord_SUP;
    else
@@ -73,11 +74,11 @@ for jj = 1:size(FRONT_tips, 1)
    FR_Near_keys_idxs = find_nearest_idxs(Front_Keys, F_Tip, 4);
    
    % ----- Keys Retrieval on Upper Frame ----- %
-   UP_Near_keys_idxs = UP_Keys(FR_Near_keys_idxs(jj,:), :);
+   UP_Near_keys = UP_Keys(FR_Near_keys_idxs, :);
    
    
    % ----- Triangulation of Upper Tip ------ %
-   x_keys_selected = UP_Near_keys_idxs(:, 1);
+   x_keys_selected = UP_Near_keys(:, 1);
    
    x_tips = UP_tips(:,1);
    
@@ -88,10 +89,25 @@ for jj = 1:size(FRONT_tips, 1)
    
    
    % ----- Stack FRONT and UP Tips in the 3D Tips Array ----- %
-   matched_tips(1,:, jj) = F_Tip;
-   matched_tips(2,:, jj) = UP_tips( choosen_tip_idx, : );
+   matched_tips(jj, :) = UP_tips( choosen_tip_idx, : );
    
+   if jj>1 && all(matched_tips(jj-1, :) == matched_tips(jj, :))
+      % check X_diff w.r.t. really previous tip
+      x_prev = UP_tips( choosen_tip_idx - 1, 1 );
+      x_actual = matched_tips(jj, 1);
+      
+      if abs( x_prev - x_actual ) < 50
+         matched_tips(jj-1, :) = UP_tips( choosen_tip_idx - 1, : );
+      end
+   end
+
 end
 
+% Remove duplicates
+[unique_up_tips, unique_idx, ~] = unique(matched_tips, 'rows', 'stable');
+unique_front_tips = FRONT_tips(unique_idx, :);
+
+matched_tips = cat(3, unique_front_tips, unique_up_tips);
+matched_tips = permute(matched_tips, [3,2,1]);
 
 end
