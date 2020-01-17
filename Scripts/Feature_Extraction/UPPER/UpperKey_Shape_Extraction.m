@@ -88,39 +88,39 @@ up_video.BlackKeys_Mask = Black_Mask & ~bwareafilt(Black_Mask, 1, 'smallest');
 
 props = regionprops(BW, 'Centroid', 'Extrema');
 
-   % ----- Coordinate Computation ----- %
 
-   % ----- 'Lower Extrema' ----- %
-% Store 'Lower Extrema' as a vertically stacked [x,y] coordinates matrix
+% ----- 'Lower Extrema' ----- %
+% Store as a vertically stacked [x,y] coordinates matrix
 % Extrema are represented by Keys' centroid
 centroids = vertcat(props.Centroid);
-up_video.WHITE_Keys_centerCoord_INF = centroids;
 
 
 
-   % ----- 'Upper Extrema' ----- %
-% Store 'Upper Extrema' as a vertically stacked [x,y] coordinates matrix
+% ----- 'Upper Extrema' ----- %
+% Store as a vertically stacked [x,y] coordinates matrix
 % Extrema are computed by averaging upper extrema Points and respective
 % key's centroid
 upper_extrema = Extrema_Coord_AVG(props, 'high');
 upper_extrema = cat(3, upper_extrema, centroids);
 upper_extrema = mean(upper_extrema, 3);
 
-up_video.WHITE_Keys_centerCoord_SUP = upper_extrema;   
 
+% ----- Combining Extrema ----- %
+% in order to create a more centered estimator of the key. 
+
+centr = cat(3, centroids, upper_extrema); 
+centr = mean(centr, 3);
+
+up_video.WHITE_Keys_centerCoord = centr;
 
 
    % ----- Plotting ----- %
 % figure(100);
 % imshow( up_video.WhiteKeys_Mask );
 % hold on;
-% scatter( up_video.WHITE_Keys_centerCoord_SUP(:,1), ...
-%          up_video.WHITE_Keys_centerCoord_SUP(:,2), ...
-%          'ro' );
-%       
-% scatter( up_video.WHITE_Keys_centerCoord_INF(:,1), ...
-%          up_video.WHITE_Keys_centerCoord_INF(:,2), ...
-%          'go' );
+% scatter( up_video.WHITE_Keys_centerCoord(:,1), ...
+%          up_video.WHITE_Keys_centerCoord(:,2), ...
+%          40, 'o', 'r', 'filled' );
 
             % ==================== %
 
@@ -129,21 +129,26 @@ up_video.WHITE_Keys_centerCoord_SUP = upper_extrema;
    
 props = regionprops(up_video.BlackKeys_Mask, 'Centroid', 'Extrema');
 
-   % ----- 'Upper Extrema' ----- %
-% Store 'Upper Extrema' as a vertically stacked [x,y] coordinates matrix
+% ----- 'Upper Extrema' ----- %
+% Store as a vertically stacked [x,y] coordinates matrix
 % Extrema are represented by Keys' centroid
 
 centroids = vertcat(props.Centroid);
-up_video.BLACK_Keys_centerCoord_SUP = centroids;
 
-
-
-   % ----- 'Lower Extrema' ----- %
-% Store 'Lower Extrema' as a vertically stacked [x,y] coordinates matrix
+% ----- 'Lower Extrema' ----- %
+% Store as a vertically stacked [x,y] coordinates matrix
 % Extrema are represented by Keys' central lowest Point
 
 bottom_extrema = Extrema_Coord_AVG(props, 'low');
-up_video.BLACK_Keys_centerCoord_INF = bottom_extrema;
+
+
+% ----- Combining Extrema ----- %
+% in order to create a more centered estimator of the key. 
+
+centr = cat(3, centroids, bottom_extrema); 
+centr = mean(centr, 3);
+
+up_video.BLACK_Keys_centerCoord = centr;
 
 
 
@@ -151,40 +156,23 @@ up_video.BLACK_Keys_centerCoord_INF = bottom_extrema;
 % figure(101);
 % imshow( up_video.BlackKeys_Mask );
 % hold on;
-% scatter( up_video.BLACK_Keys_centerCoord_SUP(:,1), ...
-%          up_video.BLACK_Keys_centerCoord_SUP(:,2), ...
-%          'ro' );
-%       
-% scatter( up_video.BLACK_Keys_centerCoord_INF(:,1), ...
-%          up_video.BLACK_Keys_centerCoord_INF(:,2), ...
-%          'go' );
+% scatter( up_video.BLACK_Keys_centerCoord(:,1), ...
+%          up_video.BLACK_Keys_centerCoord(:,2), ...
+%          40, 'o', 'r', 'filled' );
 
             % ==================== %
 
 
       %% ===== Joining Centroids ===== %
 
-   % ----- Top Values ----- %
 centr = cat( 1, ...
-            up_video.WHITE_Keys_centerCoord_SUP, ...
-            up_video.BLACK_Keys_centerCoord_SUP );
+            up_video.WHITE_Keys_centerCoord, ...
+            up_video.BLACK_Keys_centerCoord );
 
 % Sort on X Coordinate Value
 centr = sortrows( centr, 1, 'ascend' );
 
-up_video.ALLKeys_centerCoord_SUP = centr;
-
-
-
-   % ----- Bottom Values ----- %
-centr = cat( 1, ...
-            up_video.WHITE_Keys_centerCoord_INF, ...
-            up_video.BLACK_Keys_centerCoord_INF );
-
-% Sort on X Coordinate Value
-centr = sortrows( centr, 1, 'ascend' );
-
-up_video.ALLKeys_centerCoord_INF = centr;
+up_video.ALLKeys_centerCoord = centr;
 
 
 
@@ -192,13 +180,9 @@ up_video.ALLKeys_centerCoord_INF = centr;
 % figure(102);
 % imshow( up_video.BlackKeys_Mask | up_video.WhiteKeys_Mask );
 % hold on;
-% scatter( up_video.ALLKeys_centerCoord_SUP(:,1), ...
-%          up_video.ALLKeys_centerCoord_SUP(:,2), ...
-%          'ro' );
-%       
-% scatter( up_video.ALLKeys_centerCoord_INF(:,1), ...
-%          up_video.ALLKeys_centerCoord_INF(:,2), ...
-%          'g*' );
+% scatter( up_video.ALLKeys_centerCoord(:,1), ...
+%          up_video.ALLKeys_centerCoord(:,2), ...
+%          40, 'o', 'r', 'filled' );
 
 
 

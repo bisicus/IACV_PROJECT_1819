@@ -48,6 +48,7 @@ front_video.WhiteKeys_Mask = BW & BW_dilated;
 
                      % ==================== %
             
+                     
       %% ===== BLACK KEYS Keyboard Mask Detection ====== %
       
    % ----- color filtering ----- %
@@ -99,11 +100,11 @@ front_video.WHITE_Keys_centerCoord_INF = bottom_extrema;
 % hold on;
 % scatter( front_video.WHITE_Keys_centerCoord_SUP(:,1), ...
 %          front_video.WHITE_Keys_centerCoord_SUP(:,2), ...
-%          'ro' );
+%          40, 'o', 'r', 'filled' );
 %       
 % scatter( front_video.WHITE_Keys_centerCoord_INF(:,1), ...
 %          front_video.WHITE_Keys_centerCoord_INF(:,2), ...
-%          'go' );
+%          40, 'o', 'g', 'filled' );
  
                      % ==================== %
             
@@ -135,13 +136,15 @@ front_video.BLACK_Keys_centerCoord_INF = bottom_extrema;
 % hold on;
 % scatter( front_video.BLACK_Keys_centerCoord_SUP(:,1), ...
 %          front_video.BLACK_Keys_centerCoord_SUP(:,2), ...
-%          'ro' );
+%          40, 'o', 'r', 'filled' );
 %       
 % scatter( front_video.BLACK_Keys_centerCoord_INF(:,1), ...
 %          front_video.BLACK_Keys_centerCoord_INF(:,2), ...
-%          'go' );
-
-
+%          40, 'o', 'g', 'filled' );
+ 
+                     % ==================== %
+            
+                     
       %% ===== Joining Centroids ===== %
 
    % ----- Top Values ----- %
@@ -173,11 +176,11 @@ front_video.ALLKeys_centerCoord_INF = centr;
 % hold on;
 % scatter( front_video.ALLKeys_centerCoord_SUP(:,1), ...
 %          front_video.ALLKeys_centerCoord_SUP(:,2), ...
-%          'ro' );
+%          40, 'o', 'r', 'filled' );
 %       
 % scatter( front_video.ALLKeys_centerCoord_INF(:,1), ...
 %          front_video.ALLKeys_centerCoord_INF(:,2), ...
-%          'g*' );
+%          40, 'o', 'g', 'filled' );
 
 
 
