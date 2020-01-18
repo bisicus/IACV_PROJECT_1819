@@ -80,7 +80,6 @@ Upper_Line_Features
 
 
 
-
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % ------------------------------- %
             % -----   HARDCODING KNOWN  ----- %
@@ -88,23 +87,7 @@ Upper_Line_Features
             % ------------------------------- %
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-%{
-   World Coordinate System Origin (O) is fixed where keyboard's keys are
-   connected to the plastic command board.
-   Z-axis grows through keys lenght.
-            
-   All Measuments are taken in millimeters
-%}
-            
-WORLD_Measures.White_Keys_End = 135; % Corresponding to lenght of white keys
-
-WORLD_Measures.Black_Keys_End = 82; % Corresponding to lenght of black keys
-
-WORLD_Measures.Only_White_Portion_lenght = ...
-         WORLD_Measures.White_Keys_End - WORLD_Measures.Black_Keys_End;
-            
-% TODO: Include other measuments
-
+Real_World_Measurements
 
 %% ----- Routine -----
 ii = 1;
