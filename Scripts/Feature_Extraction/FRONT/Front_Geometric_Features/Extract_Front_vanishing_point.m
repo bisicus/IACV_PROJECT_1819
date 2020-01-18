@@ -7,7 +7,7 @@ BW = bwperim(I);
 P  = houghpeaks(H,80,'threshold',ceil(0.3*max(H(:))));
 lines = houghlines(BW,T,R,P,'MinLength', 40);
 
-% figure(1)
+% figure(1000)
 % imshow(H,[],'XData',T,'YData',R,...
 %             'InitialMagnification','fit');
 % xlabel('\theta'), ylabel('\rho');
@@ -61,7 +61,7 @@ lines_right = lines_right(1:end - del_idx);
 
 
 %%
-% figure(2); imshow(BW); hold on
+% figure(1001); imshow(BW); hold on
 % 
 % for k = 1:length(lines_left)
 %    xy = [lines_left(k).point1; lines_left(k).point2];

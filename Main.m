@@ -63,20 +63,21 @@ up_video.background = ...
                % ----- FRONT BACKGROUND ----- %
 
 % Video Features
-FrontKey_Shape_Extraction
-Front_KBD_Mask
+Extract_Front_Keys_Mask
+Extract_Front_Centroids
 
 % Geometric Features
-Front_vanishing_point
-Front_WhiteKeys_line
-Front_blackKeys_line
+Extract_Front_vanishing_point
+Extract_Front_WhiteKeys_line
+Extract_Front_blackKeys_line
+
 
                % ----- UPPER BACKGROUND ----- %
 
 % Video Features
-UpperKey_Shape_Extraction
-Upper_KBD_Mask
-Upper_Line_Features
+Extract_Up_Keys_Mask
+Extract_Up_Centroids
+Extract_Up_Line_Features
 
 
 
@@ -87,8 +88,9 @@ Upper_Line_Features
             % ------------------------------- %
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-Real_World_Measurements
-Up_Pixel_Centimeter_Relation
+Hardcode_Real_World_Measurements
+Compute_Up_Pixel_Centimeter_Ratio
+
 
 %% ----- Routine -----
 ii = 1;
@@ -99,7 +101,7 @@ while ~isDone(sysObjs.Front_VideoReader) ...
    
    % ----- FRONT VIDEO PROCESSING ----- %
    FRONT_frame = sysObjs.Front_VideoReader.step();
-   FRONT_tips = FRONT_Finger_tips(FRONT_frame, front_video.Complete_KBD_Mask);
+   FRONT_tips = FRONT_Finger_tips(FRONT_frame, front_video.HandsOnKBD_Mask);
    
    
    % ----- UPPER VIDEO PROCESSING ----- %
@@ -112,13 +114,13 @@ while ~isDone(sysObjs.Front_VideoReader) ...
                                     front_video, up_video, ...
                                     front_geometric_features);
                                  
-%   f_matched = permute( matched_tips(1, :,:), [3,2,1] );
-%   figure(1); imshow(FRONT_frame); hold on
-%   scatter( f_matched(:,1), f_matched(:,2), 80, [1:1:length(f_matched(:,1))], 'filled' )
-%   
-%   u_matched = permute( matched_tips(2, :,:), [3,2,1] );
-%   figure(2); imshow(UP_frame); hold on
-%   scatter( u_matched(:,1), u_matched(:,2), 80, [1:1:length(u_matched(:,1))], 'filled' )
+  f_matched = permute( matched_tips(1, :,:), [3,2,1] );
+  figure(1); imshow(FRONT_frame); hold on
+  scatter( f_matched(:,1), f_matched(:,2), 80, [1:1:length(f_matched(:,1))], 'filled' )
+  
+  u_matched = permute( matched_tips(2, :,:), [3,2,1] );
+  figure(2); imshow(UP_frame); hold on
+  scatter( u_matched(:,1), u_matched(:,2), 80, [1:1:length(u_matched(:,1))], 'filled' )
    
    
    % ----- TIPS TO WORLD CONVERSION ----- %

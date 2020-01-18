@@ -84,106 +84,17 @@ up_video.BlackKeys_Mask = Black_Mask & ~bwareafilt(Black_Mask, 1, 'smallest');
             % ==================== %
 
             
-      %% ===== WHITE KEYS Centroid Feature extraction ====== %
+      %% ===== Joining Masks to Obtain 'Hand Playing ROI' ====== %
+% Combine Masks
+KBD_Mask = up_video.BlackKeys_Mask | up_video.WhiteKeys_Mask;
+KBD_Mask = bwareaopen(KBD_Mask, 1000);
 
-props = regionprops(BW, 'Centroid', 'Extrema');
-
-
-% ----- 'Lower Extrema' ----- %
-% Store as a vertically stacked [x,y] coordinates matrix
-% Extrema are represented by Keys' centroid
-centroids = vertcat(props.Centroid);
-
+% Dilation to fill Leaks between keys
+KBD_Mask = imdilate( KBD_Mask, strel('line', 10, 5) );
+KBD_Mask = imfill(KBD_Mask, 'holes');
 
 
-% ----- 'Upper Extrema' ----- %
-% Store as a vertically stacked [x,y] coordinates matrix
-% Extrema are computed by averaging upper extrema Points and respective
-% key's centroid
-upper_extrema = Extrema_Coord_AVG(props, 'high');
-upper_extrema = cat(3, upper_extrema, centroids);
-upper_extrema = mean(upper_extrema, 3);
-
-
-% ----- Combining Extrema ----- %
-% in order to create a more centered estimator of the key. 
-
-centr = cat(3, centroids, upper_extrema); 
-centr = mean(centr, 3);
-
-up_video.WHITE_Keys_centerCoord = centr;
-
-
-   % ----- Plotting ----- %
-% figure(100);
-% imshow( up_video.WhiteKeys_Mask );
-% hold on;
-% scatter( up_video.WHITE_Keys_centerCoord(:,1), ...
-%          up_video.WHITE_Keys_centerCoord(:,2), ...
-%          40, 'o', 'r', 'filled' );
-
-            % ==================== %
-
-                        
-      %% ===== BLACK KEYS Centroid Feature extraction ====== %
-   
-props = regionprops(up_video.BlackKeys_Mask, 'Centroid', 'Extrema');
-
-% ----- 'Upper Extrema' ----- %
-% Store as a vertically stacked [x,y] coordinates matrix
-% Extrema are represented by Keys' centroid
-
-centroids = vertcat(props.Centroid);
-
-% ----- 'Lower Extrema' ----- %
-% Store as a vertically stacked [x,y] coordinates matrix
-% Extrema are represented by Keys' central lowest Point
-
-bottom_extrema = Extrema_Coord_AVG(props, 'low');
-
-
-% ----- Combining Extrema ----- %
-% in order to create a more centered estimator of the key. 
-
-centr = cat(3, centroids, bottom_extrema); 
-centr = mean(centr, 3);
-
-up_video.BLACK_Keys_centerCoord = centr;
-
-
-
-   % ----- Plotting ----- %
-% figure(101);
-% imshow( up_video.BlackKeys_Mask );
-% hold on;
-% scatter( up_video.BLACK_Keys_centerCoord(:,1), ...
-%          up_video.BLACK_Keys_centerCoord(:,2), ...
-%          40, 'o', 'r', 'filled' );
-
-            % ==================== %
-
-
-      %% ===== Joining Centroids ===== %
-
-centr = cat( 1, ...
-            up_video.WHITE_Keys_centerCoord, ...
-            up_video.BLACK_Keys_centerCoord );
-
-% Sort on X Coordinate Value
-centr = sortrows( centr, 1, 'ascend' );
-
-up_video.ALLKeys_centerCoord = centr;
-
-
-
-   % ----- Plotting ----- %
-% figure(102);
-% imshow( up_video.BlackKeys_Mask | up_video.WhiteKeys_Mask );
-% hold on;
-% scatter( up_video.ALLKeys_centerCoord(:,1), ...
-%          up_video.ALLKeys_centerCoord(:,2), ...
-%          40, 'o', 'r', 'filled' );
-
+up_video.HandsOnKBD_Mask = KBD_Mask;
 
 
 %% ----- Cleaning Workspace ----- %
@@ -192,3 +103,4 @@ clear BW BW_dilated Black_Mask props angle
 clear black_centroids black_feret_extrema
 clear props centr
 clear bottom_extrema upper_extrema centroids
+clear KBD_Mask
