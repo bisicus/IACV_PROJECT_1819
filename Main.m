@@ -50,6 +50,8 @@ sysObjs = initSystemObjects(...
 front_video.background = ...
       backgroundDetection(sysObjs.Front_BackgroundReader, 50);
       
+up_video.background = ...
+      backgroundDetection(sysObjs.Upper_BackgroundReader, 50);
    
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % ---------------------------------- %
@@ -61,17 +63,22 @@ front_video.background = ...
                % ----- FRONT BACKGROUND ----- %
 
 % Video Features
-FrontKey_Shape_Extraction
-Front_KBD_Mask
+Extract_Front_Keys_Mask
+Extract_Front_Centroids
 
 % Geometric Features
-Front_vanishing_point
-Front_WhiteKeys_line
-Front_blackKeys_line
+Extract_Front_vanishing_point
+Extract_Front_WhiteKeys_line
+Extract_Front_blackKeys_line
+
 
                % ----- UPPER BACKGROUND ----- %
 
-% TODO
+% Video Features
+Extract_Up_Keys_Mask
+Extract_Up_Centroids
+Extract_Up_Line_Features
+
 
 
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,75 +88,50 @@ Front_blackKeys_line
             % ------------------------------- %
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-%{
-   World Coordinate System Origin (O) is fixed where keyboard's keys are
-   connected to the plastic command board.
-   Z-axis grows through keys lenght.
-            
-   All Measuments are taken in millimeters
-%}
-            
-WORLD_Measures.White_Keys_End = 135; % Corresponding to lenght of white keys
-
-WORLD_Measures.Black_Keys_End = 82; % Corresponding to lenght of black keys
-
-WORLD_Measures.Only_White_Portion_lenght = ...
-         WORLD_Measures.White_Keys_End - WORLD_Measures.Black_Keys_End;
-            
-% TODO: Include other measuments
+Hardcode_Real_World_Measurements
+Compute_Up_Pixel_Centimeter_Ratio
 
 
 %% ----- Routine -----
 ii = 1;
+plot = 1;
 
-while ~isDone(sysObjs.Front_VideoReader)
+while ~isDone(sysObjs.Front_VideoReader) ...
+      && ~isDone(sysObjs.Upper_VideoReader)
    
-   frame = sysObjs.Front_VideoReader.step();
+   % ----- FRONT VIDEO PROCESSING ----- %
+   FRONT_frame = sysObjs.Front_VideoReader.step();
+   FRONT_tips = FRONT_Finger_tips(FRONT_frame, front_video.HandsOnKBD_Mask);
    
-   hands = FRONT_skin_segmentation(frame);
+   
+   % ----- UPPER VIDEO PROCESSING ----- %
+   UP_frame = sysObjs.Upper_VideoReader.step();
+   UP_tips = UP_Finger_tips(UP_frame);
+   
+   
+   % ----- TIPS MATCHING ----- %
+   matched_tips = match_UpFront_tips(FRONT_tips, UP_tips, ....
+                                    front_video, up_video, ...
+                                    front_geometric_features);
+                                 
+  f_matched = permute( matched_tips(1, :,:), [3,2,1] );
+  figure(1); imshow(FRONT_frame); hold on
+  scatter( f_matched(:,1), f_matched(:,2), 80, [1:1:length(f_matched(:,1))], 'filled' )
   
+  u_matched = permute( matched_tips(2, :,:), [3,2,1] );
+  figure(2); imshow(UP_frame); hold on
+  scatter( u_matched(:,1), u_matched(:,2), 80, [1:1:length(u_matched(:,1))], 'filled' )
    
-   Front_finger_tips = Finger_Tips(hands, front_video.Complete_KBD_Mask);
-   % just for plotting
-   marked_frame = add_Marker_to_frame(frame, Front_finger_tips);
    
-   %{
-      Computation of Real World Coordinates of Finger Tips
-      PROCEDURE for each Finger Tip:
-      1) CrossRatio Elements Computation
-         - Computation of 'line to the horizon' passing through Tip and 
-           Vanishing Point
-         - B Point, intersection of 'horizon line' and 'Black Keys
-           Termination' line
-         - W Point, intersection of 'horizon line' and 'White Keys
-           Termination' line
-      2) Computing CrossRatio for T, B, W, Vp
-      3) Using Cr quantity to Compute World Coordinates
-         - TODO:
+   % ----- TIPS TO WORLD CONVERSION ----- %
+%    [X_Coord, Z_Coord] = FRONT_Tips2World( FRONT_tips, front_geometric_features );
    
-   %}
-   
-   for kk = 1:size(Front_finger_tips, 1)
-      T = [ Front_finger_tips(kk, :), 1 ];
-      
-      horizon_line = homog_cross(T, front_geometric_features.vanish_point);
-      B = homog_cross(horizon_line, front_geometric_features.horiz_BlackKey_line);
-      W = homog_cross(horizon_line, front_geometric_features.horiz_whiteKey_line);
-      
-      %{
-         Point order is fixed so that hardcoded 'real-world known properies'
-         can be used.
-         Points are loaded in the same order in which they could be
-         encountered by going from camera to Vanishing Point:
-         T, B, W, 
-      %}
-      
-      C_r = cross_ratio(T, B, W, front_geometric_features.vanish_point);
-      
-      Z_Coord = tip_world_depth(WORLD_Measures, C_r);
+   if plot
+      FRONT_frame = add_Marker_to_frame(FRONT_frame, FRONT_tips);
+      UP_frame = add_Marker_to_frame(UP_frame, UP_tips);
+%       sysObjs.videoFileWriter.step( ... );
    end
-   sysObjs.videoFileWriter.step(marked_frame);
-
+   
    ii = ii+1;
 end
 
