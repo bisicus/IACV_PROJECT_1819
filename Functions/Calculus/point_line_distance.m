@@ -46,9 +46,10 @@ b = line(2);
 c = line(3);
 
 denom = (a^2 + b^2)^(0.5);
+num = abs( a*x + b*y + c );
 
    % ===== Measurements ===== %
-distance = (point * line') / denom;
+distance = num / denom;
 
 
 c1 = ( b*(b*x - a*y) - a*c ) / denom;
