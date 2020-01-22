@@ -80,7 +80,7 @@ WORLD_Measures.KBD_externals.controlBoard_DEPTH = ...
 
 % Keyboard-Desk distance, measured from Desk border to Control Board
 % measurement have been averaged on a "by-hand" preprocessing step
-WORLD_Measures.KBD_externals.kbd_desk_DIST = 11.2;
+WORLD_Measures.KBD_externals.kbd_desk_DIST = 7.35;
    
       
       
