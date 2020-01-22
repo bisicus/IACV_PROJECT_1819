@@ -1,6 +1,6 @@
-function finger_tips = UP_Tips_Coord(hands)
+function finger_tips = UP_Tips_Coord(hands_perim)
 %UP_Tips_Coord returns a set of [x,y] (= [col, row]) coordinates from a
-%grayscale image where each ROI corresponds to a finger.
+%logical image of hands' perimeter.
 %Coordinate are computed as the "spike" of each finger.
 %
 % OUTPUTS:
@@ -8,7 +8,7 @@ function finger_tips = UP_Tips_Coord(hands)
 %
 %
 % INPUT:
-%    * hands - grayscale frame
+%    * hands_perim - binary image
 %
 %
 % PROCEDURE:
@@ -33,16 +33,10 @@ function finger_tips = UP_Tips_Coord(hands)
 % See also UP_Finger_tips, FRONT_Tips_Coord
 
 
-
-   % ===== 1. Perimeter ===== %
-hands = imbinarize(hands);
-perim = bwperim(hands);
-
-
-   % ====== 2. Top-Most Perimeter Selection ===== %
+   % ====== 1. Top-Most Perimeter Selection ===== %
 
    % a. Isolating Perimeter's [row, col] indices
-[row, col] = find(perim == 1);
+[row, col] = find(hands_perim == 1);
 data = [row, col];
 
 
@@ -56,21 +50,21 @@ data = [row, col];
 topMost_Row_idx = accumarray(ix, data(:,1), [], @min);
 
 
-   % ===== 3a. Transformation in 1D Signal ===== %
+   % ===== 2a. Transformation in 1D Signal ===== %
 % Obtaining a piecewise function limited frame size on [X, Y] axes
 
 
-Y = zeros(size(hands, 2), 1);
+Y = zeros(size(hands_perim, 2), 1);
 % Since functions have their origin on bottom-left corner, there's need to
 % reflect Y values 
-img_topLeft_corner = size(hands, 1); % # Rows
+img_topLeft_corner = size(hands_perim, 1); % # Rows
 Y(unique_col_idx) = img_topLeft_corner - topMost_Row_idx;
 
 
-   % ===== 3b. Peaks Finding ===== %
+   % ===== 2b. Peaks Finding ===== %
 [peaks,idxs] = findpeaks(Y, ...
                      'NPeaks', 10, ...
-                     'MinPeakHeight', size(hands, 1) / 4.5, ...
+                     'MinPeakHeight', size(hands_perim, 1) / 4.5, ...
                      'MinPeakProminence', 5, ...
                      'MinPeakDistance', 25);
                
