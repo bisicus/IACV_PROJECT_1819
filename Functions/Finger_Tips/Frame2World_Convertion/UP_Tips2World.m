@@ -39,7 +39,7 @@ for kk = 1:num_elem
    dist = point_line_distance( Up_tips(kk, :), ...
                                up_geometric_features.keys_start_line );
    
-   Z_Coord(kk) = dist * WORLD_Measures.Up_Cam.px_to_mm_RATIO;
+   Z_Coord(kk) = dist * WORLD_Measures.Up_Cam.metr_over_px_RATIO;
 end
 
 end

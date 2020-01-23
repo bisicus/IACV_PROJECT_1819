@@ -15,7 +15,7 @@
 % NOTE: All Measuments are taken in millimeters
 
       %% ----- Lenghts ----- %
-WORLD_Measures.KBD_internals.WHITE_Key_LEN= 135;
+WORLD_Measures.KBD_internals.WHITE_Key_LEN = 135;
 
 
 WORLD_Measures.KBD_internals.BLACK_Key_LEN_max = 85;
@@ -46,7 +46,9 @@ WORLD_Measures.KBD_internals.Only_BLACK_Portion_HEIGHT = ...
 
       %% ----- Widths ----- %
       
-WORLD_Measures.KBD_internals.WHITE_Key_WIDTH = 21.6;
+WORLD_Measures.KBD_internals.WHITE_Key_WIDTH = 21.9;
+
+WORLD_Measures.KBD_internals.BLACK_Key_WIDTH = 19.1;
 
 
 %%          %%%%%%%%%%%%%%%%%%%%%%%%%
