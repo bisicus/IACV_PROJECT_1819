@@ -15,7 +15,7 @@
 % NOTE: All Measuments are taken in millimeters
 
       %% ----- Lenghts ----- %
-WORLD_Measures.KBD_internals.WHITE_Key_LEN= 135;
+WORLD_Measures.KBD_internals.WHITE_Key_LEN = 135;
 
 
 WORLD_Measures.KBD_internals.BLACK_Key_LEN_max = 85;
@@ -46,7 +46,9 @@ WORLD_Measures.KBD_internals.Only_BLACK_Portion_HEIGHT = ...
 
       %% ----- Widths ----- %
       
-WORLD_Measures.KBD_internals.WHITE_Key_WIDTH = 21.6;
+WORLD_Measures.KBD_internals.WHITE_Key_WIDTH = 21.9;
+
+WORLD_Measures.KBD_internals.BLACK_Key_WIDTH = 19.1;
 
 
 %%          %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -80,7 +82,7 @@ WORLD_Measures.KBD_externals.controlBoard_DEPTH = ...
 
 % Keyboard-Desk distance, measured from Desk border to Control Board
 % measurement have been averaged on a "by-hand" preprocessing step
-WORLD_Measures.KBD_externals.kbd_desk_DIST = 11.2;
+WORLD_Measures.KBD_externals.kbd_desk_DIST = 7.35;
    
       
       

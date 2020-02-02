@@ -1,4 +1,4 @@
-function frame = add_Marker_to_frame(frame, enlight_coords)
+function frame = add_Marker_to_frame(frame, enlight_coords, color)
 %ADDCIRCLETOKEYS adds opaque circles on coordinates 
 % pressed key coordinate
 % 
@@ -10,7 +10,7 @@ if size(enlight_coords, 2) > 2
 end
 
 
-radius = 10; %px
+radius = 13; %px
 
 % InserShape requires a [:,3] matrix defined as:
 %     [col, row, rad]
@@ -20,7 +20,7 @@ circle_coord(:,1:2) = enlight_coords;
 
 frame = insertShape(...
    frame, 'FilledCircle', circle_coord, ...
-   'LineWidth', 3, 'Color', 'green', ...
+   'LineWidth', 3, 'Color', color, ...
    'Opacity', 0.6 ...
 );
 

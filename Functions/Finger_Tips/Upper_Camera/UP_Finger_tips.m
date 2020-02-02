@@ -19,7 +19,7 @@ function [tips] = UP_Finger_tips(frame)
 %       translated as a [X,Y] Signal
 %
 %
-% See also UP_skin_segmentation, UP_Tips_Coord, FRONT_Finger_tips
+% See also UP_skin_segmentation, UP_Tips_Coord, hand_perimeter, FRONT_Finger_tips
 
 hands = UP_skin_segmentation(frame);
 
@@ -29,11 +29,12 @@ hands = hands(:,:,1);
 
 % Elimination of Table Noise that survived on top of the image
 hands(1:500, :) = 0;
-   
-hands_separated = separate_fingers(hands);
-   
-tips = UP_Tips_Coord(hands_separated);
 
+% Compute Perimeter
+perim = hand_perimeter(hands);
+
+
+tips = UP_Tips_Coord(perim);
 
 end
 

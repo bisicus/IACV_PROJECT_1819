@@ -3,7 +3,6 @@ close all
 clear
 clc
 
-
 %{ 
    IMPORTANT NOTES: 
    1) All Homogeneous Vectors that will be computed during
@@ -13,6 +12,7 @@ clc
    case of plotting more points, [x,y] coordinates can be stacked together
    
 %}
+
 %%                   ---- Folder Inclusion -----
 
 addpath(genpath('Scripts'));
@@ -90,11 +90,14 @@ Extract_Up_Line_Features
             
 Hardcode_Real_World_Measurements
 Compute_Up_Pixel_Centimeter_Ratio
-
+Metric_to_Pixel
 
 %% ----- Routine -----
-ii = 1;
-plot = 1;
+sysObjs.frame_counter = 0;
+ii = 0;
+
+prev_BLK_coords = {[]; []; []; []}; % TODO: spostare sopra
+prev_WHT_coords = {[]; []; []; []}; % TODO: spostare sopra
 
 while ~isDone(sysObjs.Front_VideoReader) ...
       && ~isDone(sysObjs.Upper_VideoReader)
@@ -114,25 +117,91 @@ while ~isDone(sysObjs.Front_VideoReader) ...
                                     front_video, up_video, ...
                                     front_geometric_features);
                                  
-  f_matched = permute( matched_tips(1, :,:), [3,2,1] );
-  figure(1); imshow(FRONT_frame); hold on
-  scatter( f_matched(:,1), f_matched(:,2), 80, [1:1:length(f_matched(:,1))], 'filled' )
-  
-  u_matched = permute( matched_tips(2, :,:), [3,2,1] );
-  figure(2); imshow(UP_frame); hold on
-  scatter( u_matched(:,1), u_matched(:,2), 80, [1:1:length(u_matched(:,1))], 'filled' )
-   
    
    % ----- TIPS TO WORLD CONVERSION ----- %
-%    [X_Coord, Z_Coord] = FRONT_Tips2World( FRONT_tips, front_geometric_features );
+   % separate matched tips
+   F_Tips = permute( matched_tips(1, :,:), [3,2,1] );
+   U_Tips = permute( matched_tips(2, :,:), [3,2,1] );
+
+   Z_Front = FRONT_Tips2World( F_Tips, front_geometric_features, WORLD_Measures );
+   Z_Up = UP_Tips2World( U_Tips, up_geometric_features, WORLD_Measures );
    
-   if plot
-      FRONT_frame = add_Marker_to_frame(FRONT_frame, FRONT_tips);
-      UP_frame = add_Marker_to_frame(UP_frame, UP_tips);
-%       sysObjs.videoFileWriter.step( ... );
+   [ WHT_pressed_idxs_CANDIDATE, ...
+     BLK_pressed_idxs_CANDIDATE ] = Check_Pressed( Z_Front, ...
+                                                   Z_Up, ...
+                                                   WORLD_Measures.Front_Cam.ANGLE_avg, ...
+                                                   WORLD_Measures.KBD_internals.Only_BLACK_Portion_HEIGHT, ...
+                                                   U_Tips, ...
+                                                   up_video, ...
+                                                   Camera_Measures);
+   
+                                                
+   % ----- Comparison With Previous Frames ----- %
+   % BLACK
+   [ ~, BLK_pressed_data ] = compare_on_prev_frames( F_Tips(BLK_pressed_idxs_CANDIDATE, :), ...
+                                                     prev_BLK_coords, ...
+                                                     Camera_Measures.BLACK_Key_WIDTH/3, ...
+                                                     2, ...
+                                                     Camera_Measures.BLACK_Key_LEN/3);
+   
+   if ~isempty(BLK_pressed_data)
+      [~, BLK_pressed_idxs] = ismember(BLK_pressed_data, F_Tips, 'rows');
+   else
+      BLK_pressed_idxs = [];
    end
    
-   ii = ii+1;
+   
+   % WHITE
+   [ ~, WHT_pressed_data ] = compare_on_prev_frames( F_Tips(WHT_pressed_idxs_CANDIDATE, :), ...
+                                                     prev_WHT_coords, ...
+                                                     Camera_Measures.WHITE_Key_WIDTH/3, ...
+                                                     2 );
+   
+   if ~isempty(WHT_pressed_data)
+      [~, WHT_pressed_idxs] = ismember(WHT_pressed_data, F_Tips, 'rows');
+   else
+      WHT_pressed_idxs = [];
+   end
+   
+   
+   % ----- Update Frame History Structure ----- %
+   prev_BLK_coords = queue_circular_shift(prev_BLK_coords, F_Tips(BLK_pressed_idxs_CANDIDATE,:));
+   
+   prev_WHT_coords = queue_circular_shift(prev_WHT_coords, F_Tips(WHT_pressed_idxs_CANDIDATE,:));
+   
+   
+   % ----- Plotting ------ %
+   if ~isempty(WHT_pressed_idxs)
+      disp([ 'frame: ' num2str(sysObjs.frame_counter) ...
+             ' WHITE pressed: [' num2str(WHT_pressed_idxs(:).') ']' ]);
+      FRONT_frame = add_Marker_to_frame(FRONT_frame, F_Tips(WHT_pressed_idxs, :), 'blue');
+      UP_frame = add_Marker_to_frame(UP_frame, U_Tips(WHT_pressed_idxs, :), 'blue');
+      
+      prev_WHT_coords = remove_from_queue( prev_WHT_coords, ...
+                                           F_Tips(WHT_pressed_idxs,:), ...
+                                           Camera_Measures.WHITE_Key_WIDTH/3 );
+   end
+   
+   if ~isempty(BLK_pressed_idxs)
+      disp([ 'frame: ' num2str(sysObjs.frame_counter) ...
+             ' BLACK pressed: [' num2str(BLK_pressed_idxs(:).') ']' ]);
+      FRONT_frame = add_Marker_to_frame(FRONT_frame, F_Tips(BLK_pressed_idxs, :), 'green');
+      UP_frame = add_Marker_to_frame(UP_frame, U_Tips(BLK_pressed_idxs, :), 'green');
+      
+      prev_BLK_coords = remove_from_queue( prev_BLK_coords, ...
+                                           F_Tips(BLK_pressed_idxs,:), ...
+                                           Camera_Measures.BLACK_Key_WIDTH/3 );
+   end
+   
+%    img = montage( {FRONT_frame, UP_frame} , 'Size', [2,1] );
+   img = montage( {FRONT_frame, UP_frame} , 'Size', [2,1],...
+                  'BorderSize', [140,180], 'BackgroundColor', 'white',...
+                  'ThumbnailSize', [1080, 1920] );
+   
+   sysObjs.videoFileWriter.step( img.CData );
+
+   
+   sysObjs.frame_counter = sysObjs.frame_counter + 1;
 end
 
 

@@ -1,4 +1,4 @@
-function ratio = cross_ratio(X1,X2,X3,X4)
+function ratio = cross_ratio(A,B,C,D)
 %CROSS_RATIO Given four points in 2D homogenous coordinates returns their
 % crossratio value
 % OUTPUTS:
@@ -9,24 +9,23 @@ function ratio = cross_ratio(X1,X2,X3,X4)
 %        Xi = [x, y, 1]
 %
 % PROCEDURE:
-%    * ratio = (|X1, X2|*|X3, X4|) / (|X1, X3|*|X2, X4|)
+%    * ratio = (|A,C|*|B,D|) / (|B,C|*|A,D|)
 %
-%                     (xi | xj)
-%    * |Xi, Xj| = det( ------- )
-%                     (yi | yj)
+%                      |xi , xj| 
+%    * |Xi, Xj| = det( |yi , yj| )
 
 % Transformingn from homogeneous coordinates to Euclidean.
 % NOTE: Assuming that last homogeneous coordinate 'w' is 1 
 % There's also need to transpose all vectors since inputs are Rows
-X1 = X1(1:2)';
-X2 = X2(1:2)';
-X3 = X3(1:2)';
-X4 = X4(1:2)';
+A = A(1:2)';
+B = B(1:2)';
+C = C(1:2)';
+D = D(1:2)';
 
-M1 = [X1, X2];
-M2 = [X3, X4];
-M3 = [X1, X3];
-M4 = [X2, X4];
+M1 = [A, C];
+M2 = [B, D];
+M3 = [B, C];
+M4 = [A, D];
 
 ratio = ( det(M1) * det(M2) ) / ( det(M3) * det(M4) );
 
