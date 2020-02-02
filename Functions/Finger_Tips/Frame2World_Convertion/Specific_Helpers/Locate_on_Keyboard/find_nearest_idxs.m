@@ -11,7 +11,7 @@ addRequired(parser, 'query_pts');
 addOptional(parser, 'num', 1);
 
 addParameter( parser, 'method', 'euclidean', ...
-              @(met) ismember(met, {'manhattan', 'only_x', 'euclidean'}) );
+              @(met) ismember(met, {'euclidean', 'manhattan', 'only_x', 'only_y'}) );
 
 
 parse(parser, fixed_pts, query_pts, varargin{:});
@@ -47,6 +47,8 @@ switch method
       dist = dist_X + dist_Y;
    case 'only_x'
       dist = dist_X;
+   case 'only_y'
+      dist = dist_Y;
    otherwise %Euclidean
       dist = dist_X.^2 + dist_Y.^2;
 end
