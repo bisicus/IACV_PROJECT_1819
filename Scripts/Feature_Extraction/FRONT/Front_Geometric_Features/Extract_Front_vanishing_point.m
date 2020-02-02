@@ -1,7 +1,8 @@
 I = front_video.WhiteKeys_Mask;
 BW = bwperim(I);
 
-%% Vanishing Point
+%% Hough Lines
+
 [H,T,R] = hough(BW,'Theta',-45:0.5:45, 'RhoResolution', 1);
 
 P  = houghpeaks(H,80,'threshold',ceil(0.3*max(H(:))));
@@ -10,6 +11,7 @@ lines = houghlines(BW,T,R,P,'MinLength', 40);
 % figure(1000)
 % imshow(H,[],'XData',T,'YData',R,...
 %             'InitialMagnification','fit');
+% title('Hough Peaks')
 % xlabel('\theta'), ylabel('\rho');
 % axis on, axis normal, hold on;
 % x = T(P(:,2)); y = R(P(:,1));
@@ -17,7 +19,10 @@ lines = houghlines(BW,T,R,P,'MinLength', 40);
 
 
 
-%% Post Production
+%% Hardcore deletion of verical lines
+%{
+   Due to noise identified lines cannot  
+%}
 
 % Deletion of vertical lines
 theta = [lines.theta]';
@@ -68,16 +73,16 @@ lines_right = lines_right(1:end - del_idx);
 %    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
 % 
 %    % Plot beginnings and ends of lines
-%    plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
-%    plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+%    scatter(xy(1,1),xy(1,2), 40,'o','blue', 'filled');
+%    scatter(xy(2,1),xy(2,2), 40,'o','red', 'filled');
 % end
 % for k = 1:length(lines_right)
 %    xy = [lines_right(k).point1; lines_right(k).point2];
 %    plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
 % 
 %    % Plot beginnings and ends of lines
-%    plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
-%    plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+%    scatter(xy(1,1),xy(1,2), 40,'o','blue', 'filled');
+%    scatter(xy(2,1),xy(2,2), 40,'o','red', 'filled');
 % end
 
 %% Find Vanishing Point:

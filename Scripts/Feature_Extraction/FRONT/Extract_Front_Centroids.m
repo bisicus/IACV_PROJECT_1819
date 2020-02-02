@@ -23,15 +23,15 @@ front_video.WHITE_Keys_centerCoord_INF = bottom_extrema;
 
    % ----- Plotting ----- %
 % figure(200);
-% imshow( front_video.WhiteKeys_Mask );
+% imshow( front_video.WhiteKeys_Mask ); title("White-keys' centroids")
 % hold on;
 % scatter( front_video.WHITE_Keys_centerCoord_SUP(:,1), ...
 %          front_video.WHITE_Keys_centerCoord_SUP(:,2), ...
-%          40, 'o', 'r', 'filled' );
+%          50, 'o', 'r', 'filled' );
 %       
 % scatter( front_video.WHITE_Keys_centerCoord_INF(:,1), ...
 %          front_video.WHITE_Keys_centerCoord_INF(:,2), ...
-%          40, 'o', 'g', 'filled' );
+%          50, 'o', 'g', 'filled' );
  
                      % ==================== %
             
@@ -60,15 +60,15 @@ front_video.BLACK_Keys_centerCoord_INF = bottom_extrema;
 
    % ----- Plotting ----- %
 % figure(201);
-% imshow( front_video.BlackKeys_Mask );
+% imshow( front_video.BlackKeys_Mask ); title("black-keys' centroids")
 % hold on;
 % scatter( front_video.BLACK_Keys_centerCoord_SUP(:,1), ...
 %          front_video.BLACK_Keys_centerCoord_SUP(:,2), ...
-%          40, 'o', 'r', 'filled' );
+%          50, 'o', 'r', 'filled' );
 %       
 % scatter( front_video.BLACK_Keys_centerCoord_INF(:,1), ...
 %          front_video.BLACK_Keys_centerCoord_INF(:,2), ...
-%          40, 'o', 'g', 'filled' );
+%          50, 'o', 'g', 'filled' );
  
                      % ==================== %
             
@@ -99,16 +99,17 @@ front_video.ALLKeys_centerCoord_INF = centr;
 
 
    % ----- Plotting ----- %
-% figure(202);
-% imshow( front_video.BlackKeys_Mask | front_video.WhiteKeys_Mask );
-% hold on;
-% scatter( front_video.ALLKeys_centerCoord_SUP(:,1), ...
-%          front_video.ALLKeys_centerCoord_SUP(:,2), ...
-%          40, 'o', 'r', 'filled' );
-%       
-% scatter( front_video.ALLKeys_centerCoord_INF(:,1), ...
-%          front_video.ALLKeys_centerCoord_INF(:,2), ...
-%          40, 'o', 'g', 'filled' );
+figure(202);
+imshow( front_video.BlackKeys_Mask | front_video.WhiteKeys_Mask );
+title("Keyboard Centroids. green: lower, red: upper")
+hold on;
+scatter( front_video.ALLKeys_centerCoord_SUP(:,1), ...
+         front_video.ALLKeys_centerCoord_SUP(:,2), ...
+         50, 'o', 'r', 'filled' );
+      
+scatter( front_video.ALLKeys_centerCoord_INF(:,1), ...
+         front_video.ALLKeys_centerCoord_INF(:,2), ...
+         50, 'o', 'g', 'filled' );
 
 
 %% ----- Cleaning Workspace ----- %

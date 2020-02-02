@@ -68,7 +68,7 @@ Y(unique_col_idx) = bottomMost_Row_idx;
 
 % Plotting
 % X = 1:1:size(fingers, 2); % # Columns
-% figure(2); plot(X,Y,idxs,peaks,'r*')
+% figure(2); plot(X,1080-Y,idxs,1080-peaks,'r*')
 
 
    % ===== Peaks Return ===== %
