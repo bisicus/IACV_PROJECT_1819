@@ -48,10 +48,15 @@ front_geometric_features.horiz_BlackKey_line = ...
             horiz_BlackKey_line / horiz_BlackKey_line(3);
 
 %% Plotting
-% figure(1); imshow(front_video.WhiteKeys_Mask); hold on
-% plot_homog_line(horiz_BlackKey_line, [1,1920])
+if show_figures == 1
+   
+   figure(1006); imshow(front_video.WhiteKeys_Mask); hold on
+   title( 'Black Keys finishing Line' )
 
+   plot_homog_line(horiz_BlackKey_line, [1,1920])
+   scatter(P(:,1), P(:,2), 40, 'cyan', 'o', 'filled')
 
+end
 %% Clean Workspace
 
 clear ii jj kk k

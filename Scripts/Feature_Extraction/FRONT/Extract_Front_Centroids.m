@@ -19,19 +19,6 @@ front_video.WHITE_Keys_centerCoord_SUP = centroids;
 % Extrema are represented by Keys' central lowest Point
 bottom_extrema = Extrema_Coord_AVG(props, 'low');
 front_video.WHITE_Keys_centerCoord_INF = bottom_extrema;
-
-
-   % ----- Plotting ----- %
-% figure(200);
-% imshow( front_video.WhiteKeys_Mask ); title("White-keys' centroids")
-% hold on;
-% scatter( front_video.WHITE_Keys_centerCoord_SUP(:,1), ...
-%          front_video.WHITE_Keys_centerCoord_SUP(:,2), ...
-%          50, 'o', 'r', 'filled' );
-%       
-% scatter( front_video.WHITE_Keys_centerCoord_INF(:,1), ...
-%          front_video.WHITE_Keys_centerCoord_INF(:,2), ...
-%          50, 'o', 'g', 'filled' );
  
                      % ==================== %
             
@@ -56,19 +43,6 @@ bottom_extrema = Extrema_Coord_AVG(props, 'low');
 
 front_video.BLACK_Keys_centerCoord_SUP = upper_extrema;
 front_video.BLACK_Keys_centerCoord_INF = bottom_extrema;
-   
-
-   % ----- Plotting ----- %
-% figure(201);
-% imshow( front_video.BlackKeys_Mask ); title("black-keys' centroids")
-% hold on;
-% scatter( front_video.BLACK_Keys_centerCoord_SUP(:,1), ...
-%          front_video.BLACK_Keys_centerCoord_SUP(:,2), ...
-%          50, 'o', 'r', 'filled' );
-%       
-% scatter( front_video.BLACK_Keys_centerCoord_INF(:,1), ...
-%          front_video.BLACK_Keys_centerCoord_INF(:,2), ...
-%          50, 'o', 'g', 'filled' );
  
                      % ==================== %
             
@@ -97,20 +71,53 @@ centr = sortrows( centr, 1, 'ascend' );
 front_video.ALLKeys_centerCoord_INF = centr;
 
 
+      %% ===== Plotting ===== %
 
-   % ----- Plotting ----- %
-figure(202);
-imshow( front_video.BlackKeys_Mask | front_video.WhiteKeys_Mask );
-title("Keyboard Centroids. green: lower, red: upper")
-hold on;
-scatter( front_video.ALLKeys_centerCoord_SUP(:,1), ...
-         front_video.ALLKeys_centerCoord_SUP(:,2), ...
-         50, 'o', 'r', 'filled' );
-      
-scatter( front_video.ALLKeys_centerCoord_INF(:,1), ...
-         front_video.ALLKeys_centerCoord_INF(:,2), ...
-         50, 'o', 'g', 'filled' );
+if show_figures == 1
+   
+   % White Keys Mask %
+   figure(200);
+   imshow( front_video.WhiteKeys_Mask ); title("White-keys' centroids")
+   hold on;
+   scatter( front_video.WHITE_Keys_centerCoord_SUP(:,1), ...
+            front_video.WHITE_Keys_centerCoord_SUP(:,2), ...
+            50, 'o', 'r', 'filled' );
 
+   scatter( front_video.WHITE_Keys_centerCoord_INF(:,1), ...
+            front_video.WHITE_Keys_centerCoord_INF(:,2), ...
+            50, 'o', 'g', 'filled' );
+   hold off;
+
+   
+   % Black Keys Mask %
+   figure(201);
+   imshow( front_video.BlackKeys_Mask ); title("black-keys' centroids")
+   hold on;
+   scatter( front_video.BLACK_Keys_centerCoord_SUP(:,1), ...
+            front_video.BLACK_Keys_centerCoord_SUP(:,2), ...
+            50, 'o', 'red', 'filled' );
+
+   scatter( front_video.BLACK_Keys_centerCoord_INF(:,1), ...
+            front_video.BLACK_Keys_centerCoord_INF(:,2), ...
+            50, 'o', 'greed', 'filled' );
+   hold off;
+   
+         
+   % ALL Keys Mask %
+   figure(202);
+   imshow( front_video.BlackKeys_Mask | front_video.WhiteKeys_Mask );
+   title("Keyboard Centroids. green: lower, red: upper")
+   hold on;
+   scatter( front_video.ALLKeys_centerCoord_SUP(:,1), ...
+            front_video.ALLKeys_centerCoord_SUP(:,2), ...
+            50, 'o', 'red', 'filled' );
+
+   scatter( front_video.ALLKeys_centerCoord_INF(:,1), ...
+            front_video.ALLKeys_centerCoord_INF(:,2), ...
+            50, 'o', 'green', 'filled' );
+   hold off;
+   
+end
 
 %% ----- Cleaning Workspace ----- %
 

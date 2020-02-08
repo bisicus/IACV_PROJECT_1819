@@ -19,6 +19,12 @@ addpath(genpath('Scripts'));
 addpath(genpath('Functions'));
 addpath(genpath('Videos'));
 
+
+%%                   ---- Plotting Option -----
+
+show_figures = 1;
+plot_graphs = 1;
+
 %%                   ---- Preparing Steps ----- 
 
 
@@ -94,7 +100,6 @@ Metric_to_Pixel
 
 %% ----- Routine -----
 sysObjs.frame_counter = 0;
-ii = 0;
 
 prev_BLK_coords = {[]; []; []; []}; % TODO: spostare sopra
 prev_WHT_coords = {[]; []; []; []}; % TODO: spostare sopra
@@ -208,3 +213,14 @@ end
 %%
 
 releaseSystemObjects(sysObjs)
+
+%% Cleaning Workspace
+
+clear UP_frame FRONT_frame
+clear prev_BLK_coords prev_WHT_coords
+clear UP_Finger_tips U_Tips UP_tips FRONT_tips F_Tips
+clear WHT_pressed_data WHT_pressed_idxs WHT_pressed_idxs_CANDIDATE
+clear BLK_pressed_data BLK_pressed_idxs BLK_pressed_idxs_CANDIDATE
+clear matched_tips
+clear Z_Front Z_Up
+clear img
