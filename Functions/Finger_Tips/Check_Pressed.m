@@ -17,7 +17,7 @@ function [ WHT_pressed_idxs, ...
    
    % 1. Real World Finger Height
    base = abs( Z_Front - Z_Up );
-   height = base / tan(angle);
+   height = base * tan(angle);
    
    
    % 2. Fingers that are really over Black Keys

@@ -138,13 +138,13 @@ L_min = WORLD_Measures.Front_Cam.cam_desk_DIST + ...
         WORLD_Measures.KBD_externals.controlBoard_DEPTH;
 
 
-WORLD_Measures.Front_Cam.ANGLE_min = atan( L_min / Height );
+WORLD_Measures.Front_Cam.ANGLE_min = atan( Height / L_min);
      
 L_max = WORLD_Measures.Front_Cam.cam_desk_DIST + ...
         WORLD_Measures.KBD_externals.kbd_desk_DIST + ...
         WORLD_Measures.KBD_externals.DEPTH;
      
-WORLD_Measures.Front_Cam.ANGLE_max = atan( L_max / Height );
+WORLD_Measures.Front_Cam.ANGLE_max = atan( Height / L_max);
 
 
 WORLD_Measures.Front_Cam.ANGLE_avg = ...
