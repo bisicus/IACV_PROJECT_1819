@@ -45,11 +45,11 @@ a = line(1);
 b = line(2);
 c = line(3);
 
-denom = (a^2 + b^2)^(0.5);
+denom = (a^2 + b^2);
 num = abs( a*x + b*y + c );
 
    % ===== Measurements ===== %
-distance = num / denom;
+distance = num / (denom^(0.5));
 
 
 c1 = ( b*(b*x - a*y) - a*c ) / denom;
