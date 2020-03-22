@@ -30,15 +30,6 @@ centr = mean(centr, 3);
 
 up_video.WHITE_Keys_centerCoord = centr;
 
-
-   % ----- Plotting ----- %
-% figure(100);
-% imshow( up_video.WhiteKeys_Mask );
-% hold on;
-% scatter( up_video.WHITE_Keys_centerCoord(:,1), ...
-%          up_video.WHITE_Keys_centerCoord(:,2), ...
-%          40, 'o', 'r', 'filled' );
-
             % ==================== %
 
                         
@@ -69,15 +60,6 @@ centr = mean(centr, 3);
 up_video.BLACK_Keys_centerCoord = centr;
 
 
-
-   % ----- Plotting ----- %
-% figure(101);
-% imshow( up_video.BlackKeys_Mask );
-% hold on;
-% scatter( up_video.BLACK_Keys_centerCoord(:,1), ...
-%          up_video.BLACK_Keys_centerCoord(:,2), ...
-%          40, 'o', 'r', 'filled' );
-
             % ==================== %
 
 
@@ -94,14 +76,41 @@ up_video.ALLKeys_centerCoord = centr;
 
 
 
-   % ----- Plotting ----- %
-% figure(102);
-% imshow( up_video.BlackKeys_Mask | up_video.WhiteKeys_Mask );
-% hold on;
-% scatter( up_video.ALLKeys_centerCoord(:,1), ...
-%          up_video.ALLKeys_centerCoord(:,2), ...
-%          40, 'o', 'r', 'filled' );
+   %% ===== Plotting ===== %
+if show_figures == 1
+   figure(100);
+   imshow( up_video.WhiteKeys_Mask );
+   title("White-keys' centroids")
+   hold on;
+   scatter( up_video.WHITE_Keys_centerCoord(:,1), ...
+            up_video.WHITE_Keys_centerCoord(:,2), ...
+            50, 'o', 'red', 'filled' );
+   hold off;
 
+
+
+   figure(101);
+   imshow( up_video.BlackKeys_Mask );
+   title("black-keys' centroids")
+   hold on;
+   scatter( up_video.BLACK_Keys_centerCoord(:,1), ...
+            up_video.BLACK_Keys_centerCoord(:,2), ...
+            50, 'o', 'red', 'filled' );
+   hold off
+
+
+
+   figure(102);
+   imshow( up_video.BlackKeys_Mask | up_video.WhiteKeys_Mask );
+   title("Keyboard Centroids")
+   hold on;
+   scatter( up_video.ALLKeys_centerCoord(:,1), ...
+            up_video.ALLKeys_centerCoord(:,2), ...
+            50, 'o', 'red', 'filled' );
+   hold off;
+   
+end
+      
 %% ----- Cleaning Workspace ----- %
 
 clear props centroids centr

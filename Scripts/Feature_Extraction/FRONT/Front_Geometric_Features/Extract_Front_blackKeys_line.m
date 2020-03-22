@@ -26,15 +26,15 @@ P = [...
 
 %% Intersecting all points
 
-k = ( length(P)-1 * (length(P)) ) /2;
-L = zeros(k, 3);
+k = nchoosek( length(P), 2 );
+to_combine = zeros(k, 3); % Preallocate for speed
 
 kk = 1;
 for ii = 1:length(P) - 1
    for jj = ii+1 : length(P)
        
-       l = cross(P(ii,:), P(jj,:)); %must be row vector
-       L(kk, :) = l;
+       l = cross(P(ii,:), P(jj,:));
+       to_combine(kk, :) = l;
        
        kk = kk+1;
    end
@@ -42,7 +42,7 @@ end
 
 
 %% Averaging to obtain the actual line
-horiz_BlackKey_line = mean(L, 1);
+horiz_BlackKey_line = mean(to_combine, 1);
 
 front_geometric_features.horiz_BlackKey_line = ...
             horiz_BlackKey_line / horiz_BlackKey_line(3);
@@ -50,11 +50,11 @@ front_geometric_features.horiz_BlackKey_line = ...
 %% Plotting
 if show_figures == 1
    
-   figure(1006); imshow(front_video.WhiteKeys_Mask); hold on
+   figure(1006); imshow(front_video.background); hold on
    title( 'Black Keys finishing Line' )
 
    plot_homog_line(horiz_BlackKey_line, [1,1920])
-   scatter(P(:,1), P(:,2), 40, 'cyan', 'o', 'filled')
+   scatter(P(:,1), P(:,2), 55, 'magenta', 'o', 'filled')
 
 end
 %% Clean Workspace

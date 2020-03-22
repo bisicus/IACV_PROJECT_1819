@@ -34,20 +34,35 @@ real_diag = ( real_len^2 + real_width^2 )^0.5;
 white_ratio = real_diag / px_diag;
 
 
-
 %% Plotting
 
-% figure(300);
-% h = imshowpair(BW, convex_hull);
-% axis = h.Parent;
-% for ii = 1:36
-%     xmin = [props(ii).MaxFeretCoordinates(1,1) props(ii).MaxFeretCoordinates(2,1)];
-%     ymin = [props(ii).MaxFeretCoordinates(1,2) props(ii).MaxFeretCoordinates(2,2)];
-%     imdistline(axis,xmin,ymin);
-% end
-% 
-% title( {'White Keys versus Convex Hull', ...
-%         'Measurements of each key diagonal'} );
+if show_figures == 1
+   figure(300);
+   hold on;
+   
+   h = imshow(BW);
+   axis = h.Parent;
+   for ii = 1:36
+       xmin = [props(ii).MaxFeretCoordinates(1,1) props(ii).MaxFeretCoordinates(2,1)];
+       ymin = [props(ii).MaxFeretCoordinates(1,2) props(ii).MaxFeretCoordinates(2,2)];
+       dst = imdistline(axis,xmin,ymin);
+       text_lab = getLabelHandle(dst);
+       text_lab.FontSize = 14;
+       text_lab.FontWeight = 'bold';
+       text_lab.Rotation = 180+dst.getAngleFromHorizontal;
+       text_lab.HorizontalAlignment = 'center';
+       text_lab.VerticalAlignment = 'middle';
+       text_lab.Margin = 0.5;
+       text_lab.EdgeColor = [0.65,0.65,0.65];
+       text_lab.LineWidth = 1;
+       text_lab.BackgroundColor = [0.94,0.94,0.94]; 
+   end
+
+   title( {'White Keys versus Convex Hull', ...
+           'Measurements of each key diagonal'} );
+        
+   hold off;
+end
 
 
       %% ===== BLACK KEYS ===== %
@@ -81,18 +96,29 @@ black_ratio = real_diag / px_diag;
 
 %% Plotting
 
-% figure(301);
-% h = imshowpair(BW, convex_hull);
-% axis = h.Parent;
-% for ii = 1:36
-%     xmin = [props(ii).MaxFeretCoordinates(1,1) props(ii).MaxFeretCoordinates(2,1)];
-%     ymin = [props(ii).MaxFeretCoordinates(1,2) props(ii).MaxFeretCoordinates(2,2)];
-%     imdistline(axis,xmin,ymin);
-% end
-% 
-% title( {'Black Keys versus Convex Hull', ...
-%         'Measurements of each key diagonal'} );
+if show_figures == 1
+   figure(301);
+   h = imshow(BW);
+   axis = h.Parent;
+   for ii = 1:25
+       xmin = [props(ii).MaxFeretCoordinates(1,1) props(ii).MaxFeretCoordinates(2,1)];
+       ymin = [props(ii).MaxFeretCoordinates(1,2) props(ii).MaxFeretCoordinates(2,2)];
+       dst = imdistline(axis,xmin,ymin);
+       text_lab = getLabelHandle(dst);
+       text_lab.FontSize = 14;
+       text_lab.FontWeight = 'bold';
+       text_lab.Rotation = 180+dst.getAngleFromHorizontal;
+       text_lab.HorizontalAlignment = 'center';
+       text_lab.VerticalAlignment = 'middle';
+       text_lab.Margin = 0.5;
+       text_lab.EdgeColor = [0.65,0.65,0.65];
+       text_lab.LineWidth = 1;
+       text_lab.BackgroundColor = [0.94,0.94,0.94];
+   end
 
+   title( {'Black Keys versus Convex Hull', ...
+           'Measurements of each key diagonal'} );
+end
 
       %% ===== COMBINE BLACK AND WHITE RATIO ===== %
       %  ----------------------------------------- %
@@ -108,3 +134,4 @@ clear props diag px_diag
 clear real_diag real_len real_width
 clear black_ratio white_ratio
 clear h axis xmin ymin ii
+clear ans

@@ -83,8 +83,8 @@ front_geometric_features.vanish_point = mean(vanish_points, 1);
       
 if plot_graphs == 1
    figure(1000)
-   imshow(Hough_matrix, [] ,'XData', Theta, ...
-           'YData', Rho, 'InitialMagnification','fit');
+   imshow( Hough_matrix, [] ,'XData', Theta, ...
+           'YData', Rho, 'InitialMagnification', 'fit' );
    title('Hough Peaks')
    xlabel('\theta'), ylabel('\rho');
    
@@ -101,18 +101,18 @@ if show_figures == 1
    
    % 1. Plot ALL Hough Lines
    
-   figure(1001); imshow(BW); hold on
-   title( 'Computed Hough Lines')
-   plot_hough_lines(lines)
+   figure(1001); imshow(BW); hold on;
+   title( 'Computed Hough Lines');
+   plot_hough_lines(lines, 'color', 'green');
    hold off;
    
    % ------------ %
    
    % 2. Plot Filtered Hough Lines
    
-   figure(1002); imshow(BW); hold on
+   figure(1002); imshow(BW); hold on;
    title( 'Filtered Hough Lines')
-   plot_hough_lines(lines_filtered)
+   plot_hough_lines(lines_filtered, 'color', 'green');
    hold off;
    
    
@@ -120,8 +120,8 @@ if show_figures == 1
    
    % 3. scatter Vanishing Points
    
-   figure(1003); imshow(BW); hold on
-   title( 'Computed Vanishing Point')
+   figure(1003); imshow(BW); hold on;
+   title( 'Pairwise Vanishing Point - To Average')
    
    ii = 1;
    for kk = 1:length(lines_left)
@@ -134,12 +134,12 @@ if show_figures == 1
 
          vp = vanish_points(ii, [1,2]);
          plot([xy_1(1,1), vp(1)], [xy_1(1,2), vp(2)], 'LineWidth',2,'Color','cyan');
-         scatter(xy_1(1,1), xy_1(1,2), 40, 'o', 'red', 'filled')
+         scatter(xy_1(1,1), xy_1(1,2), 40, 'o', 'red', 'filled');
          
          plot([xy_2(1,1), vp(1)], [xy_2(1,2), vp(2)], 'LineWidth',2,'Color','cyan');
-         scatter(xy_2(1,1), xy_2(1,2), 40, 'o', 'red', 'filled')
+         scatter(xy_2(1,1), xy_2(1,2), 40, 'o', 'red', 'filled');
          
-         scatter(vp(1), vp(2), 30, 'square', 'red', 'filled')
+         scatter(vp(1), vp(2), 30, 'square', 'red', 'filled');
          
          ii = ii + 1;
 
@@ -153,8 +153,8 @@ if show_figures == 1
    
    
    % 4. Scatter Vanishing Point versus Original Background
-   figure(1004); imshow(front_video.background); hold on
-   title( 'Computed Vanishing Point')
+   figure(1004); imshow(front_video.background); hold on;
+   title( 'Computed Vanishing Point');
    for kk = 1:length(lines_filtered)
       xy = [lines_filtered(kk).point1; front_geometric_features.vanish_point(1:2)];
       plot(xy(:,1),xy(:,2),'LineWidth',3,'Color','green');
