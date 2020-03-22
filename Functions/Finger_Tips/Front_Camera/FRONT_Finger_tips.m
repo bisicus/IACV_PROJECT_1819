@@ -29,10 +29,12 @@ hands = FRONT_skin_segmentation(frame);
 
 
    % ====== 2. ROI Isolation ===== %
+%mask application has to be done on 'double' type
 on_KBD_Hand = hands .* KBD_Mask;
 % Isolate RED Component
 on_KBD_Hand = on_KBD_Hand(:,:,1);
 
+% return to a binary image
 fingers = on_KBD_Hand>0;
 fingers = bwmorph(fingers, 'bridge', Inf);
 fingers = bwmorph(fingers, 'spur', Inf);

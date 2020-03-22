@@ -49,23 +49,23 @@ Z_Coord = zeros(num_elem, 1);
 
 
 for kk = 1:num_elem
-      T = [ Front_tips(kk, :), 1 ]; % Append 1 to make it Homogeneous
-      
-      horizon_line = homog_cross(T, front_geometric_features.vanish_point);
-      B = homog_cross(horizon_line, front_geometric_features.horiz_BlackKey_line);
-      W = homog_cross(horizon_line, front_geometric_features.horiz_whiteKey_line);
-      
-      %{
-         Point order is fixed so that hardcoded 'real-world known properies'
-         can be used.
-         Points are loaded in the same order in which they could be
-         encountered by going from camera to Vanishing Point:
-         T, B, W, 
-      %}
-      
-      C_r = cross_ratio(B, T, W, front_geometric_features.vanish_point);
-      
-      Z_Coord(kk) = tip_2_world_depth(WORLD_Measures, C_r);
+   T = [ Front_tips(kk, :), 1 ]; % Append 1 to make it Homogeneous
+
+   horizon_line = homog_cross(T, front_geometric_features.vanish_point);
+   B = homog_cross(horizon_line, front_geometric_features.horiz_BlackKey_line);
+   W = homog_cross(horizon_line, front_geometric_features.horiz_whiteKey_line);
+
+   %{
+      Point order is fixed so that hardcoded 'real-world known properies'
+      can be used.
+      Points are loaded in the same order in which they could be
+      encountered by going from camera to Vanishing Point:
+      T, B, W, 
+   %}
+
+   C_r = cross_ratio(B, T, W, front_geometric_features.vanish_point);
+
+   Z_Coord(kk) = tip_2_world_depth(WORLD_Measures, C_r);
 end
 
 end
