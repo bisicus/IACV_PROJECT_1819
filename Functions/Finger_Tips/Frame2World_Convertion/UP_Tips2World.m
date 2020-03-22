@@ -1,4 +1,4 @@
-function Z_Coord = UP_Tips2World( Up_tips, ...
+function Z_Coord = UP_Tips2World( UP_tips, ...
                                   up_geometric_features, ...
                                   WORLD_Measures )
 %UP_TIPS2WORLD Computes Real World Coordinates of each Finger Tip
@@ -31,12 +31,12 @@ function Z_Coord = UP_Tips2World( Up_tips, ...
 %
 % See also FRONT_Tips2World, point_line_distance
 
-num_elem = size(Up_tips, 1);
+num_elem = size(UP_tips, 1);
 
 Z_Coord = zeros( num_elem, 1);
 
 for kk = 1:num_elem
-   dist = point_line_distance( Up_tips(kk, :), ...
+   [dist, np] = point_line_distance( UP_tips(kk, :), ...
                                up_geometric_features.keys_start_line );
    
    Z_Coord(kk) = dist * WORLD_Measures.Up_Cam.metr_over_px_RATIO;

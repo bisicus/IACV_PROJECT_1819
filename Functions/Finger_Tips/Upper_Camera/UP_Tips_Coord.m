@@ -70,8 +70,10 @@ Y(unique_col_idx) = img_topLeft_corner - topMost_Row_idx;
                
 
 % Plotting
-% X = 1:1:size(hands, 2); % # Columns
-% figure(2); plot(X,Y,idxs,peaks,'r*')
+% X = 1:1:size(hands_perim, 2); % # Columns
+% figure(2); plot(X,Y,idxs,peaks,'r*', 'LineWidth', 2); 
+% ylim([0, 1080]);
+% title('identified contour with computed peaks'); ax = gca; ax.FontSize = 15;
 
    % ===== Peaks Return ===== %
 % Inverse reflection of Peaks on Y Axis returning to images coordinate

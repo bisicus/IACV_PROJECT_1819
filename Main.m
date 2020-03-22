@@ -1,4 +1,4 @@
-
+                                                                                                                                                                                                                 
 close all
 clear
 clc
@@ -18,6 +18,12 @@ clc
 addpath(genpath('Scripts'));
 addpath(genpath('Functions'));
 addpath(genpath('Videos'));
+
+
+%%                   ---- Plotting Option -----
+
+show_figures = 1;
+plot_graphs = 1;
 
 %%                   ---- Preparing Steps ----- 
 
@@ -94,7 +100,6 @@ Metric_to_Pixel
 
 %% ----- Routine -----
 sysObjs.frame_counter = 0;
-ii = 0;
 
 prev_BLK_coords = {[]; []; []; []}; % TODO: spostare sopra
 prev_WHT_coords = {[]; []; []; []}; % TODO: spostare sopra
@@ -109,7 +114,7 @@ while ~isDone(sysObjs.Front_VideoReader) ...
    
    % ----- UPPER VIDEO PROCESSING ----- %
    UP_frame = sysObjs.Upper_VideoReader.step();
-   UP_tips = UP_Finger_tips(UP_frame);
+   UP_tips = UP_Finger_tips(UP_frame, up_video.HandsOnKBD_Mask);
    
    
    % ----- TIPS MATCHING ----- %
@@ -120,80 +125,79 @@ while ~isDone(sysObjs.Front_VideoReader) ...
    
    % ----- TIPS TO WORLD CONVERSION ----- %
    % separate matched tips
-   F_Tips = permute( matched_tips(1, :,:), [3,2,1] );
-   U_Tips = permute( matched_tips(2, :,:), [3,2,1] );
+   FRONT_tips = permute( matched_tips(1, :,:), [3,2,1] );
+   UP_tips = permute( matched_tips(2, :,:), [3,2,1] );
 
-   Z_Front = FRONT_Tips2World( F_Tips, front_geometric_features, WORLD_Measures );
-   Z_Up = UP_Tips2World( U_Tips, up_geometric_features, WORLD_Measures );
+   Z_Front = FRONT_Tips2World( FRONT_tips, front_geometric_features, WORLD_Measures );
+   Z_Up    = UP_Tips2World( UP_tips, up_geometric_features, WORLD_Measures );
    
    [ WHT_pressed_idxs_CANDIDATE, ...
      BLK_pressed_idxs_CANDIDATE ] = Check_Pressed( Z_Front, ...
                                                    Z_Up, ...
                                                    WORLD_Measures.Front_Cam.ANGLE_avg, ...
                                                    WORLD_Measures.KBD_internals.Only_BLACK_Portion_HEIGHT, ...
-                                                   U_Tips, ...
+                                                   UP_tips, ...
                                                    up_video, ...
                                                    Camera_Measures);
    
                                                 
    % ----- Comparison With Previous Frames ----- %
    % BLACK
-   [ ~, BLK_pressed_data ] = compare_on_prev_frames( F_Tips(BLK_pressed_idxs_CANDIDATE, :), ...
+   [ ~, BLK_pressed_data ] = compare_on_prev_frames( FRONT_tips(BLK_pressed_idxs_CANDIDATE, :), ...
                                                      prev_BLK_coords, ...
                                                      Camera_Measures.BLACK_Key_WIDTH/3, ...
                                                      2, ...
                                                      Camera_Measures.BLACK_Key_LEN/3);
    
    if ~isempty(BLK_pressed_data)
-      [~, BLK_pressed_idxs] = ismember(BLK_pressed_data, F_Tips, 'rows');
+      [~, BLK_pressed_idxs] = ismember(BLK_pressed_data, FRONT_tips, 'rows');
    else
       BLK_pressed_idxs = [];
    end
    
    
    % WHITE
-   [ ~, WHT_pressed_data ] = compare_on_prev_frames( F_Tips(WHT_pressed_idxs_CANDIDATE, :), ...
+   [ ~, WHT_pressed_data ] = compare_on_prev_frames( FRONT_tips(WHT_pressed_idxs_CANDIDATE, :), ...
                                                      prev_WHT_coords, ...
                                                      Camera_Measures.WHITE_Key_WIDTH/3, ...
                                                      2 );
    
    if ~isempty(WHT_pressed_data)
-      [~, WHT_pressed_idxs] = ismember(WHT_pressed_data, F_Tips, 'rows');
+      [~, WHT_pressed_idxs] = ismember(WHT_pressed_data, FRONT_tips, 'rows');
    else
       WHT_pressed_idxs = [];
    end
    
    
    % ----- Update Frame History Structure ----- %
-   prev_BLK_coords = queue_circular_shift(prev_BLK_coords, F_Tips(BLK_pressed_idxs_CANDIDATE,:));
+   prev_BLK_coords = queue_circular_shift(prev_BLK_coords, FRONT_tips(BLK_pressed_idxs_CANDIDATE,:));
    
-   prev_WHT_coords = queue_circular_shift(prev_WHT_coords, F_Tips(WHT_pressed_idxs_CANDIDATE,:));
+   prev_WHT_coords = queue_circular_shift(prev_WHT_coords, FRONT_tips(WHT_pressed_idxs_CANDIDATE,:));
    
    
    % ----- Plotting ------ %
    if ~isempty(WHT_pressed_idxs)
       disp([ 'frame: ' num2str(sysObjs.frame_counter) ...
              ' WHITE pressed: [' num2str(WHT_pressed_idxs(:).') ']' ]);
-      FRONT_frame = add_Marker_to_frame(FRONT_frame, F_Tips(WHT_pressed_idxs, :), 'blue');
-      UP_frame = add_Marker_to_frame(UP_frame, U_Tips(WHT_pressed_idxs, :), 'blue');
+      FRONT_frame = add_Marker_to_frame(FRONT_frame, FRONT_tips(WHT_pressed_idxs, :), 'blue');
+      UP_frame = add_Marker_to_frame(UP_frame, UP_tips(WHT_pressed_idxs, :), 'blue');
       
       prev_WHT_coords = remove_from_queue( prev_WHT_coords, ...
-                                           F_Tips(WHT_pressed_idxs,:), ...
+                                           FRONT_tips(WHT_pressed_idxs,:), ...
                                            Camera_Measures.WHITE_Key_WIDTH/3 );
    end
    
    if ~isempty(BLK_pressed_idxs)
       disp([ 'frame: ' num2str(sysObjs.frame_counter) ...
              ' BLACK pressed: [' num2str(BLK_pressed_idxs(:).') ']' ]);
-      FRONT_frame = add_Marker_to_frame(FRONT_frame, F_Tips(BLK_pressed_idxs, :), 'green');
-      UP_frame = add_Marker_to_frame(UP_frame, U_Tips(BLK_pressed_idxs, :), 'green');
+      FRONT_frame = add_Marker_to_frame(FRONT_frame, FRONT_tips(BLK_pressed_idxs, :), 'green');
+      UP_frame = add_Marker_to_frame(UP_frame, UP_tips(BLK_pressed_idxs, :), 'green');
       
       prev_BLK_coords = remove_from_queue( prev_BLK_coords, ...
-                                           F_Tips(BLK_pressed_idxs,:), ...
+                                           FRONT_tips(BLK_pressed_idxs,:), ...
                                            Camera_Measures.BLACK_Key_WIDTH/3 );
    end
-   
-%    img = montage( {FRONT_frame, UP_frame} , 'Size', [2,1] );
+%   
    img = montage( {FRONT_frame, UP_frame} , 'Size', [2,1],...
                   'BorderSize', [140,180], 'BackgroundColor', 'white',...
                   'ThumbnailSize', [1080, 1920] );
@@ -208,3 +212,14 @@ end
 %%
 
 releaseSystemObjects(sysObjs)
+
+%% Cleaning Workspace
+
+clear UP_frame FRONT_frame
+clear prev_BLK_coords prev_WHT_coords
+clear UP_Finger_tips U_Tips UP_tips FRONT_tips F_Tips
+clear WHT_pressed_data WHT_pressed_idxs WHT_pressed_idxs_CANDIDATE
+clear BLK_pressed_data BLK_pressed_idxs BLK_pressed_idxs_CANDIDATE
+clear matched_tips
+clear Z_Front Z_Up
+clear img

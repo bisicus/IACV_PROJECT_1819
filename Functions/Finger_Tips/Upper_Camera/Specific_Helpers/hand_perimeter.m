@@ -25,7 +25,6 @@ canny = edg & bw;
 
 % 3) Combining Edges with Perimeter in order to obtain more detailed image
 perim = canny | sobel;
-perim = bwperim(perim);
 
 
 % 4) Connecting sparse lines to perimeter holes

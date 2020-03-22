@@ -4,39 +4,41 @@ BW = bwperim(I);
 
 %%
 
-[H,theta,rho] = hough(BW,'Theta',-90:0.5:-75, 'RhoResolution', 1);
+[Hough_matrix,Theta,Rho] = hough(BW, 'Theta', -90:0.5:-75, 'RhoResolution', 1);
 
-P  = houghpeaks(H,1,'threshold',ceil(0.3*max(H(:))));
-lines = houghlines(BW,theta,rho,P,'MinLength', 40);
+Peaks = houghpeaks(Hough_matrix, 1, 'threshold', ceil(0.3*max(Hough_matrix(:))) );
+lines = houghlines(BW, Theta, Rho, Peaks, 'MinLength', 40);
 
 % x = theta(P(:,2)); y = rho(P(:,1));
 % plot(x,y,'s','color','white');
 
-%% HardCode Selection of 'White Key Ending' lines
+%% Lines Interpolation
 
 % order lines by mean of rho value
+lines = sort_HoughLine_data(lines, 'point', 'sort_direction', 'ascend');
 
-rho = [lines.rho]';
-[~, ind] = sortrows(rho, 'ascend');
-lines = lines(ind);
+to_combine = zeros(length(lines), 3);
+for ii = 1:length(lines)
+   to_combine(ii, :) = HoughLine_to_homog(lines(ii));
+end
 
-point1 = [lines(1).point1, 1];
-point2 = [lines(end).point2, 1];
-
-
-front_geometric_features.horiz_whiteKey_line = ...
-               homog_cross(point1, point2);
+front_geometric_features.horiz_whiteKey_line = mean(to_combine, 1);
 
 
 %% Plotting
-% figure(1); imshow(front_video.WhiteKeys_Mask); hold on
-% plot_homog_line(horiz_whiteKey_line, [1,1920])
+if show_figures == 1
+   
+   figure(1005); imshow(front_video.background); hold on
+   title( 'White Keys finishing Line' );
+   
+   plot_homog_line(front_geometric_features.horiz_whiteKey_line, [1,1920]);
+   
+   % Plot computed Hough lines
+   plot_hough_lines(lines, 'color', 'green');
 
+end
 %% Clear Workspace
 
 clear BW I
-clear H P rho theta
-clear a b coeff x y xy
-clear k max_len
-clear lines point1 point2 l
-clear ind
+clear Hough_matrix Peaks Rho Theta
+clear lines hom

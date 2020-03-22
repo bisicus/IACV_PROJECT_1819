@@ -8,8 +8,18 @@ function [ WHT_pressed_idxs, ...
 %CHECK_PRESSED Summary of this function goes here
 %   Detailed explanation goes here
 
+   % Define Fuzzy thresholds;
+   WHT_Thresh = -2.5;
+   
+   BLK_Thresh = BLK_height*0.975;
+   dist_from_centroid_thresh = [ ...
+         camera_struct.BLACK_Key_WIDTH / 2.5; ...
+         camera_struct.BLACK_Key_LEN / 3
+   ];
+   
+   
    % ===== Check White Pressed ===== %
-   WHT_pressed_idxs = find( Z_Up > Z_Front);
+   WHT_pressed_idxs = find( Z_Up - Z_Front > WHT_Thresh);
    
    
    
@@ -17,7 +27,7 @@ function [ WHT_pressed_idxs, ...
    
    % 1. Real World Finger Height
    base = abs( Z_Front - Z_Up );
-   height = base / tan(angle);
+   height = base * tan(angle);
    
    
    % 2. Fingers that are really over Black Keys
@@ -30,10 +40,11 @@ function [ WHT_pressed_idxs, ...
                                       Up_Tips, ...
                                       1, ...
                                       'method', 'only_y' );
+         
    
-   BLK_pressed_idxs = find( height < BLK_height & ... % Basic condition
-                            dists_x < camera_struct.BLACK_Key_WIDTH / 2 & ...
-                            dists_y < camera_struct.BLACK_Key_LEN / 3 );
+   BLK_pressed_idxs = find( height  < BLK_Thresh & ... % Basic condition
+                            dists_x < dist_from_centroid_thresh(1) & ...
+                            dists_y < dist_from_centroid_thresh(2) );
    
    
    % 3. Remove 'Pressed White Keys' from input Coordinates, if any
