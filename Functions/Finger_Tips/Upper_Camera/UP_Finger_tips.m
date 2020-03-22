@@ -1,4 +1,4 @@
-function [tips] = UP_Finger_tips(frame)
+function [tips] = UP_Finger_tips(frame, KBD_Mask)
 %UP_Finger_tips returns an array containing [x,y] (= [col, row])
 %coordinates of finger-tips, computed as a "Spike" of each finger
 %
@@ -28,10 +28,10 @@ hands = UP_skin_segmentation(frame);
 hands = hands(:,:,1);
 
 % Elimination of Table Noise that survived on top of the image
-hands(1:500, :) = 0;
+on_KBD_Hand = hands .* KBD_Mask;
 
 % Compute Perimeter
-perim = hand_perimeter(hands);
+perim = hand_perimeter(on_KBD_Hand);
 
 
 tips = UP_Tips_Coord(perim);

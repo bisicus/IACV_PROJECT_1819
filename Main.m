@@ -114,7 +114,7 @@ while ~isDone(sysObjs.Front_VideoReader) ...
    
    % ----- UPPER VIDEO PROCESSING ----- %
    UP_frame = sysObjs.Upper_VideoReader.step();
-   UP_tips = UP_Finger_tips(UP_frame);
+   UP_tips = UP_Finger_tips(UP_frame, up_video.HandsOnKBD_Mask);
    
    
    % ----- TIPS MATCHING ----- %
